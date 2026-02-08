@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_margin"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium">
+
+        <TextView
+            android:id="@+id/tvSurahNumber"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:gravity="center"
+            android:background="@drawable/bg_circle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvSurahNameArabic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="السورة"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textDirection="rtl"
+            android:layout_marginStart="@dimen/padding_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvSurahNumber"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvSurahNameEnglish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Surah Name"
+            android:textSize="14sp"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSurahNameArabic"
+            app:layout_constraintStart_toEndOf="@id/tvSurahNumber"
+            app:layout_constraintEnd_toStartOf="@id/tvRevelationType"/>
+
+        <TextView
+            android:id="@+id/tvSurahTranslation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Translation"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSurahNameEnglish"
+            app:layout_constraintStart_toEndOf="@id/tvSurahNumber"
+            app:layout_constraintEnd_toStartOf="@id/tvRevelationType"/>
+
+        <TextView
+            android:id="@+id/tvAyahCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="7 verses"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSurahTranslation"
+            app:layout_constraintStart_toEndOf="@id/tvSurahNumber"
+            app:layout_constraintEnd_toStartOf="@id/tvRevelationType"/>
+
+        <TextView
+            android:id="@+id/tvRevelationType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meccan"
+            android:textSize="12sp"
+            android:textColor="@color/accent"
+            android:textStyle="bold"
+            android:padding="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

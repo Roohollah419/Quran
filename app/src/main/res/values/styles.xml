@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Arabic Text Styles -->
+    <style name="ArabicTextStyle">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textDirection">rtl</item>
+        <item name="android:textAlignment">textEnd</item>
+    </style>
+
+    <style name="ArabicTextStyle.Large">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ArabicTextStyle.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ArabicTextStyle.Title">
+        <item name="android:textSize">36sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

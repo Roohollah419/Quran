@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#FFC107</color>
+    <color name="accent_dark">#FFA000</color>
+    <color name="background">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="error">#D32F2F</color>
+    <color name="primary">#2E7D32</color>
+    <color name="primary_dark">#1B5E20</color>
+    <color name="primary_light">#66BB6A</color>
+    <color name="surface">#F5F5F5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_xlarge">24sp</dimen>
+    <string name="app_name">Quran</string>
+    <string name="apply">Apply</string>
+    <string name="ayah_count">%d verses</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">Error occurred</string>
+    <string name="font_size">Font Size</string>
+    <string name="font_size_extra_large">Extra Large</string>
+    <string name="font_size_large">Large</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_small">Small</string>
+    <string name="loading">Loading…</string>
+    <string name="settings">Settings</string>
+    <string name="surah_info">%1$s • %2$d verses • %3$s</string>
+    <string name="surahs_list">Surahs</string>
+    <string name="theme">Theme</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="total_surahs">Total Surahs: %d</string>
+    <string name="view_surahs">View Surahs</string>
+    <string name="welcome_home">Welcome to the Holy Quran</string>
+    <string name="welcome_message">Hello and welcome!</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+    </style>
+    <style name="ArabicTextStyle">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textDirection">rtl</item>
+        <item name="android:textAlignment">textEnd</item>
+    </style>
+    <style name="ArabicTextStyle.Large">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="ArabicTextStyle.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="ArabicTextStyle.Title">
+        <item name="android:textSize">36sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
