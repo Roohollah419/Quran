@@ -62,6 +62,28 @@ public class QuranRepository {
     }
 
     /**
+     * Get a random Ayah from the entire Quran.
+     */
+    public LiveData<Ayah> getRandomAyah() {
+        return Transformations.map(ayahDao.getRandomAyah(), this::convertAyahEntityToModel);
+    }
+
+    /**
+     * Get a random Surah number.
+     * Runs on background thread.
+     */
+    public void getRandomSurahNumber(RandomSurahCallback callback) {
+        QuranDatabase.databaseWriteExecutor.execute(() -> {
+            int randomSurahNumber = surahDao.getRandomSurahNumber();
+            callback.onRandomSurah(randomSurahNumber);
+        });
+    }
+
+    public interface RandomSurahCallback {
+        void onRandomSurah(int surahNumber);
+    }
+
+    /**
      * Seed database with sample data if it's empty.
      */
     private void seedDatabaseIfEmpty() {

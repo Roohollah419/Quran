@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.quran.ui.base.BaseActivity;
 import com.example.quran.utils.SettingsManager;
@@ -35,18 +34,12 @@ public class MainActivity extends BaseActivity {
 
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
-            NavigationUI.setupActionBarWithNavController(this, navController);
         }
     }
 
     @Override
     protected void observeData() {
         // No data to observe in MainActivity
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
     private void applyTheme() {

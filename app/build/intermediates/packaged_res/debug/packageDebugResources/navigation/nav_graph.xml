@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_homeFragment_to_surahListFragment"
             app:destination="@id/surahListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_surahDetailFragment"
+            app:destination="@id/surahDetailFragment" />
     </fragment>
 
     <fragment

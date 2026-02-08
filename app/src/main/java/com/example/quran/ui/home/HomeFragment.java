@@ -15,6 +15,7 @@ import com.example.quran.R;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
 import com.example.quran.ui.settings.SettingsDialogFragment;
+import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.ViewModelFactory;
 
@@ -25,10 +26,9 @@ public class HomeFragment extends BaseFragment {
 
     private HomeViewModel viewModel;
     private SettingsManager settingsManager;
-    private TextView tvAppTitle;
-    private TextView tvWelcome;
-    private TextView tvSurahCount;
-    private View btnViewSurahs;
+    private TextView tvRandomAyahArabic;
+    private View btnSkip;
+    private View btnFeelingLucky;
     private ImageButton btnSettings;
 
     @Override
@@ -38,10 +38,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void setupUI(View view) {
-        tvAppTitle = view.findViewById(R.id.tvAppTitle);
-        tvWelcome = view.findViewById(R.id.tvWelcome);
-        tvSurahCount = view.findViewById(R.id.tvSurahCount);
-        btnViewSurahs = view.findViewById(R.id.btnViewSurahs);
+        tvRandomAyahArabic = view.findViewById(R.id.tvRandomAyahArabic);
+        btnSkip = view.findViewById(R.id.btnSkip);
+        btnFeelingLucky = view.findViewById(R.id.btnFeelingLucky);
         btnSettings = view.findViewById(R.id.btnSettings);
 
         // Setup SettingsManager
@@ -55,10 +54,21 @@ public class HomeFragment extends BaseFragment {
         ViewModelFactory factory = new ViewModelFactory(repository);
         viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
 
-        // Navigate to Surah List
-        btnViewSurahs.setOnClickListener(v ->
+        // Skip button - Navigate to Surah List
+        btnSkip.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_surahListFragment)
         );
+
+        // I'm Feeling Lucky button - Navigate to random Surah
+        btnFeelingLucky.setOnClickListener(v -> {
+            viewModel.getRandomSurahNumber(surahNumber -> {
+                requireActivity().runOnUiThread(() -> {
+                    Bundle args = new Bundle();
+                    args.putInt(Constants.KEY_SURAH_NUMBER, surahNumber);
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_surahDetailFragment, args);
+                });
+            });
+        });
 
         // Settings button
         btnSettings.setOnClickListener(v -> {
@@ -72,16 +82,15 @@ public class HomeFragment extends BaseFragment {
 
     private void applyFontSize() {
         float multiplier = settingsManager.getFontSizeMultiplier();
-        tvAppTitle.setTextSize(36 * multiplier);
-        tvWelcome.setTextSize(20 * multiplier);
-        tvSurahCount.setTextSize(18 * multiplier);
+        tvRandomAyahArabic.setTextSize(24 * multiplier);
     }
 
     @Override
     protected void observeData() {
-        viewModel.getAllSurahs().observe(getViewLifecycleOwner(), surahs -> {
-            if (surahs != null) {
-                tvSurahCount.setText(getString(R.string.total_surahs, surahs.size()));
+        // Observe random Ayah and display it
+        viewModel.getRandomAyah().observe(getViewLifecycleOwner(), ayah -> {
+            if (ayah != null) {
+                tvRandomAyahArabic.setText(ayah.getTextArabic());
             }
         });
     }
