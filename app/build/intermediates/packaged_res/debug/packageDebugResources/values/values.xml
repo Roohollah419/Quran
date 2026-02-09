@@ -26,6 +26,7 @@
     <string name="ayah_count">%d verses</string>
     <string name="cancel">Cancel</string>
     <string name="error">Error occurred</string>
+    <string name="feeling_lucky">I\'m Feeling Lucky</string>
     <string name="font_size">Font Size</string>
     <string name="font_size_extra_large">Extra Large</string>
     <string name="font_size_large">Large</string>
@@ -33,6 +34,7 @@
     <string name="font_size_small">Small</string>
     <string name="loading">Loading…</string>
     <string name="settings">Settings</string>
+    <string name="skip">Skip</string>
     <string name="surah_info">%1$s • %2$d verses • %3$s</string>
     <string name="surahs_list">Surahs</string>
     <string name="theme">Theme</string>
@@ -42,7 +44,7 @@
     <string name="view_surahs">View Surahs</string>
     <string name="welcome_home">Welcome to the Holy Quran</string>
     <string name="welcome_message">Hello and welcome!</string>
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>

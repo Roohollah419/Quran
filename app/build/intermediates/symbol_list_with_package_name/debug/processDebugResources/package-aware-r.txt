@@ -3195,6 +3195,7 @@ id action_bar_title
 id action_container
 id action_context_bar
 id action_divider
+id action_homeFragment_to_surahDetailFragment
 id action_homeFragment_to_surahListFragment
 id action_image
 id action_menu_divider
@@ -3237,8 +3238,9 @@ id bounceEnd
 id bounceStart
 id btnApply
 id btnCancel
+id btnFeelingLucky
 id btnSettings
-id btnViewSurahs
+id btnSkip
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3632,16 +3634,15 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
-id tvAppTitle
 id tvAyahArabic
 id tvAyahCount
 id tvAyahNumber
 id tvAyahTranslation
 id tvFontSizeLabel
 id tvFontSizeValue
+id tvRandomAyahArabic
 id tvRevelationType
 id tvSettingsTitle
-id tvSurahCount
 id tvSurahInfo
 id tvSurahName
 id tvSurahNameArabic
@@ -3650,7 +3651,6 @@ id tvSurahNumber
 id tvSurahTranslation
 id tvThemeLabel
 id tvTitle
-id tvWelcome
 id unchecked
 id uniform
 id unlabeled
@@ -3926,6 +3926,7 @@ string error_icon_content_description
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
+string feeling_lucky
 string font_size
 string font_size_extra_large
 string font_size_large
@@ -4049,6 +4050,7 @@ string searchview_navigation_content_description
 string settings
 string side_sheet_accessibility_pane_title
 string side_sheet_behavior
+string skip
 string status_bar_notification_info_overflow
 string surah_info
 string surahs_list

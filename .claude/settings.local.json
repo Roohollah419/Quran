@@ -21,7 +21,8 @@
       "WebSearch",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:cdn.jsdelivr.net)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(./gradlew.bat clean:*)"
     ]
   }
 }

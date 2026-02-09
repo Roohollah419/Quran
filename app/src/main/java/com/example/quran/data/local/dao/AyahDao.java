@@ -31,6 +31,9 @@ public interface AyahDao {
     @Query("SELECT COUNT(*) FROM ayahs")
     int getAyahCount();
 
+    @Query("SELECT * FROM ayahs ORDER BY RANDOM() LIMIT 1")
+    LiveData<AyahEntity> getRandomAyah();
+
     @Query("DELETE FROM ayahs")
     void deleteAll();
 }

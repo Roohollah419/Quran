@@ -23,12 +23,14 @@ dimen text_size_small
 dimen text_size_xlarge
 drawable bg_circle
 drawable ic_settings
+id action_homeFragment_to_surahDetailFragment
 id action_homeFragment_to_surahListFragment
 id action_surahListFragment_to_surahDetailFragment
 id btnApply
 id btnCancel
+id btnFeelingLucky
 id btnSettings
-id btnViewSurahs
+id btnSkip
 id homeFragment
 id nav_graph
 id nav_host_fragment
@@ -40,16 +42,15 @@ id rgTheme
 id seekBarFontSize
 id surahDetailFragment
 id surahListFragment
-id tvAppTitle
 id tvAyahArabic
 id tvAyahCount
 id tvAyahNumber
 id tvAyahTranslation
 id tvFontSizeLabel
 id tvFontSizeValue
+id tvRandomAyahArabic
 id tvRevelationType
 id tvSettingsTitle
-id tvSurahCount
 id tvSurahInfo
 id tvSurahName
 id tvSurahNameArabic
@@ -58,7 +59,6 @@ id tvSurahNumber
 id tvSurahTranslation
 id tvThemeLabel
 id tvTitle
-id tvWelcome
 layout activity_main
 layout dialog_settings
 layout fragment_home
@@ -73,6 +73,7 @@ string apply
 string ayah_count
 string cancel
 string error
+string feeling_lucky
 string font_size
 string font_size_extra_large
 string font_size_large
@@ -80,6 +81,7 @@ string font_size_medium
 string font_size_small
 string loading
 string settings
+string skip
 string surah_info
 string surahs_list
 string theme

@@ -7,6 +7,8 @@
     <string name="welcome_home">Welcome to the Holy Quran</string>
     <string name="total_surahs">Total Surahs: %d</string>
     <string name="view_surahs">View Surahs</string>
+    <string name="skip">Skip</string>
+    <string name="feeling_lucky">I\'m Feeling Lucky</string>
 
     <!-- Surah List -->
     <string name="surahs_list">Surahs</string>

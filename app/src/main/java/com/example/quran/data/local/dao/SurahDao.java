@@ -31,6 +31,9 @@ public interface SurahDao {
     @Query("SELECT COUNT(*) FROM surahs")
     int getSurahCount();
 
+    @Query("SELECT number FROM surahs ORDER BY RANDOM() LIMIT 1")
+    int getRandomSurahNumber();
+
     @Query("DELETE FROM surahs")
     void deleteAll();
 }
