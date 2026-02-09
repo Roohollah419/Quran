@@ -42,7 +42,7 @@ public class SurahListFragment extends BaseFragment implements SurahAdapter.OnSu
         // Setup SettingsManager
         settingsManager = new SettingsManager(requireContext());
 
-        adapter = new SurahAdapter(this, settingsManager.getFontSizeMultiplier());
+        adapter = new SurahAdapter(this, settingsManager.getFontSizeMultiplier(), requireContext());
         recyclerView.setAdapter(adapter);
 
         // Setup ViewModel

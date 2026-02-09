@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,7 +49,7 @@ public class SurahDetailFragment extends BaseFragment {
         settingsManager = new SettingsManager(requireContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier());
+        adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
         recyclerView.setAdapter(adapter);
 
         // Apply font size to header views
@@ -92,7 +93,10 @@ public class SurahDetailFragment extends BaseFragment {
         tvSurahName.setTextSize(24 * multiplier);
         tvSurahInfo.setTextSize(14 * multiplier);
 
-        // Apply Naskh font to Arabic text
-        tvSurahName.setTypeface(Typeface.SERIF);
+        // Apply Uthman Taha Naskh font to Arabic text
+        Typeface arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
+        if (arabicTypeface != null) {
+            tvSurahName.setTypeface(arabicTypeface);
+        }
     }
 }

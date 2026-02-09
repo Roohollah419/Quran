@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:fontFamily="serif"
+        android:fontFamily="@font/uthmantaha"
         android:textDirection="rtl"
         android:textAlignment="center"
         android:lineSpacingExtra="12dp"

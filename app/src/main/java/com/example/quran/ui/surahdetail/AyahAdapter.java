@@ -1,5 +1,6 @@
 package com.example.quran.ui.surahdetail;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
@@ -22,9 +24,11 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
 
     private List<Ayah> ayahs = new ArrayList<>();
     private float fontSizeMultiplier;
+    private Typeface arabicTypeface;
 
-    public AyahAdapter(float fontSizeMultiplier) {
+    public AyahAdapter(float fontSizeMultiplier, Context context) {
         this.fontSizeMultiplier = fontSizeMultiplier;
+        this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
     }
 
     @NonNull
@@ -72,8 +76,10 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahArabic.setTextSize(20 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
 
-            // Apply Naskh font to Arabic text
-            tvAyahArabic.setTypeface(Typeface.SERIF);
+            // Apply Uthman Taha Naskh font to Arabic text
+            if (arabicTypeface != null) {
+                tvAyahArabic.setTypeface(arabicTypeface);
+            }
         }
     }
 }
