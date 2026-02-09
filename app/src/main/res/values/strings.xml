@@ -29,6 +29,8 @@
     <string name="font_size_extra_large">Extra Large</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="version">Version</string>
+    <string name="version_format">Version %s</string>
 
     <!-- General -->
     <string name="loading">Loading…</string>

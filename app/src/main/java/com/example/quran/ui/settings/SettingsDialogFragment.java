@@ -1,6 +1,8 @@
 package com.example.quran.ui.settings;
 
 import android.app.Dialog;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private SettingsManager settingsManager;
     private RadioButton rbLight, rbDark;
     private SeekBar seekBarFontSize;
-    private TextView tvFontSizeValue;
+    private TextView tvFontSizeValue, tvVersion;
     private MaterialButton btnApply, btnCancel;
 
     private OnSettingsChangedListener listener;
@@ -43,7 +45,7 @@ public class SettingsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogTheme);
         settingsManager = new SettingsManager(requireContext());
     }
 
@@ -62,8 +64,12 @@ public class SettingsDialogFragment extends DialogFragment {
         rbDark = view.findViewById(R.id.rbDark);
         seekBarFontSize = view.findViewById(R.id.seekBarFontSize);
         tvFontSizeValue = view.findViewById(R.id.tvFontSizeValue);
+        tvVersion = view.findViewById(R.id.tvVersion);
         btnApply = view.findViewById(R.id.btnApply);
         btnCancel = view.findViewById(R.id.btnCancel);
+
+        // Set version
+        setVersionText();
 
         // Load current settings
         loadCurrentSettings();
@@ -79,7 +85,7 @@ public class SettingsDialogFragment extends DialogFragment {
         if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setLayout(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT
             );
         }
     }
@@ -131,6 +137,17 @@ public class SettingsDialogFragment extends DialogFragment {
     private void updateFontSizeLabel(int fontSize) {
         String label = SettingsManager.getFontSizeLabel(fontSize);
         tvFontSizeValue.setText(label);
+    }
+
+    private void setVersionText() {
+        try {
+            PackageInfo packageInfo = requireContext().getPackageManager()
+                    .getPackageInfo(requireContext().getPackageName(), 0);
+            String version = packageInfo.versionName;
+            tvVersion.setText(getString(R.string.version_format, version));
+        } catch (PackageManager.NameNotFoundException e) {
+            tvVersion.setText(getString(R.string.version_format, "1.0"));
+        }
     }
 
     private void saveSettings() {
