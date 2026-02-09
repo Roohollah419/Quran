@@ -1,12 +1,14 @@
 package com.example.quran;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.quran.ui.base.BaseActivity;
+import com.example.quran.ui.settings.SettingsDialogFragment;
 import com.example.quran.utils.SettingsManager;
 
 /**
@@ -16,6 +18,7 @@ import com.example.quran.utils.SettingsManager;
 public class MainActivity extends BaseActivity {
 
     private NavController navController;
+    private ImageButton btnSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,16 @@ public class MainActivity extends BaseActivity {
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
         }
+
+        // Setup Settings button
+        btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(v -> {
+            SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
+                // Recreate activity to apply theme change
+                recreate();
+            });
+            dialog.show(getSupportFragmentManager(), "SettingsDialog");
+        });
     }
 
     @Override

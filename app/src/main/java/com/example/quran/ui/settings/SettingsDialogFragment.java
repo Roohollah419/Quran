@@ -1,12 +1,13 @@
 package com.example.quran.ui.settings;
 
 import android.app.Dialog;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.SeekBar;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,12 +24,13 @@ import com.google.android.material.button.MaterialButton;
 public class SettingsDialogFragment extends DialogFragment {
 
     private SettingsManager settingsManager;
-    private RadioButton rbLight, rbDark;
-    private SeekBar seekBarFontSize;
-    private TextView tvFontSizeValue;
+    private Button btnThemeLight, btnThemeDark;
+    private Button btnFontSmall, btnFontMedium, btnFontLarge, btnFontXLarge;
+    private TextView tvVersion;
     private MaterialButton btnApply, btnCancel;
 
     private OnSettingsChangedListener listener;
+    private int selectedFontSize = 1; // Default Medium
 
     public interface OnSettingsChangedListener {
         void onSettingsChanged();
@@ -43,7 +45,7 @@ public class SettingsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogTheme);
         settingsManager = new SettingsManager(requireContext());
     }
 
@@ -58,12 +60,18 @@ public class SettingsDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize views
-        rbLight = view.findViewById(R.id.rbLight);
-        rbDark = view.findViewById(R.id.rbDark);
-        seekBarFontSize = view.findViewById(R.id.seekBarFontSize);
-        tvFontSizeValue = view.findViewById(R.id.tvFontSizeValue);
+        btnThemeLight = view.findViewById(R.id.btnThemeLight);
+        btnThemeDark = view.findViewById(R.id.btnThemeDark);
+        btnFontSmall = view.findViewById(R.id.btnFontSmall);
+        btnFontMedium = view.findViewById(R.id.btnFontMedium);
+        btnFontLarge = view.findViewById(R.id.btnFontLarge);
+        btnFontXLarge = view.findViewById(R.id.btnFontXLarge);
+        tvVersion = view.findViewById(R.id.tvVersion);
         btnApply = view.findViewById(R.id.btnApply);
         btnCancel = view.findViewById(R.id.btnCancel);
+
+        // Set version
+        setVersionText();
 
         // Load current settings
         loadCurrentSettings();
@@ -79,7 +87,7 @@ public class SettingsDialogFragment extends DialogFragment {
         if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setLayout(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT
             );
         }
     }
@@ -87,32 +95,37 @@ public class SettingsDialogFragment extends DialogFragment {
     private void loadCurrentSettings() {
         // Load theme
         if (settingsManager.isDarkTheme()) {
-            rbDark.setChecked(true);
+            selectThemeButton(btnThemeDark);
         } else {
-            rbLight.setChecked(true);
+            selectThemeButton(btnThemeLight);
         }
 
         // Load font size
-        int fontSize = settingsManager.getFontSize();
-        seekBarFontSize.setProgress(fontSize);
-        updateFontSizeLabel(fontSize);
+        selectedFontSize = settingsManager.getFontSize();
+        selectFontSizeButton(selectedFontSize);
     }
 
     private void setupListeners() {
-        // Font size SeekBar listener
-        seekBarFontSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateFontSizeLabel(progress);
-            }
+        // Theme button listeners
+        btnThemeLight.setOnClickListener(v -> selectThemeButton(btnThemeLight));
+        btnThemeDark.setOnClickListener(v -> selectThemeButton(btnThemeDark));
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+        // Font size button listeners
+        btnFontSmall.setOnClickListener(v -> {
+            selectedFontSize = 0;
+            selectFontSizeButton(0);
+        });
+        btnFontMedium.setOnClickListener(v -> {
+            selectedFontSize = 1;
+            selectFontSizeButton(1);
+        });
+        btnFontLarge.setOnClickListener(v -> {
+            selectedFontSize = 2;
+            selectFontSizeButton(2);
+        });
+        btnFontXLarge.setOnClickListener(v -> {
+            selectedFontSize = 3;
+            selectFontSizeButton(3);
         });
 
         // Apply button
@@ -128,18 +141,35 @@ public class SettingsDialogFragment extends DialogFragment {
         btnCancel.setOnClickListener(v -> dismiss());
     }
 
-    private void updateFontSizeLabel(int fontSize) {
-        String label = SettingsManager.getFontSizeLabel(fontSize);
-        tvFontSizeValue.setText(label);
+    private void selectThemeButton(Button selectedButton) {
+        btnThemeLight.setSelected(selectedButton == btnThemeLight);
+        btnThemeDark.setSelected(selectedButton == btnThemeDark);
+    }
+
+    private void selectFontSizeButton(int fontSize) {
+        btnFontSmall.setSelected(fontSize == 0);
+        btnFontMedium.setSelected(fontSize == 1);
+        btnFontLarge.setSelected(fontSize == 2);
+        btnFontXLarge.setSelected(fontSize == 3);
+    }
+
+    private void setVersionText() {
+        try {
+            PackageInfo packageInfo = requireContext().getPackageManager()
+                    .getPackageInfo(requireContext().getPackageName(), 0);
+            String version = packageInfo.versionName;
+            tvVersion.setText(getString(R.string.version_format, version));
+        } catch (PackageManager.NameNotFoundException e) {
+            tvVersion.setText(getString(R.string.version_format, "1.0"));
+        }
     }
 
     private void saveSettings() {
         // Save theme
-        String theme = rbDark.isChecked() ? SettingsManager.THEME_DARK : SettingsManager.THEME_LIGHT;
+        String theme = btnThemeDark.isSelected() ? SettingsManager.THEME_DARK : SettingsManager.THEME_LIGHT;
         settingsManager.setTheme(theme);
 
         // Save font size
-        int fontSize = seekBarFontSize.getProgress();
-        settingsManager.setFontSize(fontSize);
+        settingsManager.setFontSize(selectedFontSize);
     }
 }

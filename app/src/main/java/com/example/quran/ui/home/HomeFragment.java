@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.navigation.Navigation;
 import com.example.quran.R;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
-import com.example.quran.ui.settings.SettingsDialogFragment;
 import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.ViewModelFactory;
@@ -29,7 +27,6 @@ public class HomeFragment extends BaseFragment {
     private TextView tvRandomAyahArabic;
     private View btnSkip;
     private View btnFeelingLucky;
-    private ImageButton btnSettings;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +38,6 @@ public class HomeFragment extends BaseFragment {
         tvRandomAyahArabic = view.findViewById(R.id.tvRandomAyahArabic);
         btnSkip = view.findViewById(R.id.btnSkip);
         btnFeelingLucky = view.findViewById(R.id.btnFeelingLucky);
-        btnSettings = view.findViewById(R.id.btnSettings);
 
         // Setup SettingsManager
         settingsManager = new SettingsManager(requireContext());
@@ -68,15 +64,6 @@ public class HomeFragment extends BaseFragment {
                     Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_surahDetailFragment, args);
                 });
             });
-        });
-
-        // Settings button
-        btnSettings.setOnClickListener(v -> {
-            SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
-                // Recreate activity to apply theme change
-                requireActivity().recreate();
-            });
-            dialog.show(getParentFragmentManager(), "SettingsDialog");
         });
     }
 

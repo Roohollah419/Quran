@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="@dimen/padding_large"
-    android:background="@color/surface">
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/tvSettingsTitle"
@@ -32,30 +32,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <RadioGroup
-        android:id="@+id/rgTheme"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/btnThemeLight"
+        style="@style/SettingsOptionButton"
+        android:text="@string/theme_light"
         android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
         app:layout_constraintTop_toBottomOf="@id/tvThemeLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/btnThemeDark"/>
 
-        <RadioButton
-            android:id="@+id/rbLight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/theme_light"/>
-
-        <RadioButton
-            android:id="@+id/rbDark"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/theme_dark"/>
-    </RadioGroup>
+    <Button
+        android:id="@+id/btnThemeDark"
+        style="@style/SettingsOptionButton"
+        android:text="@string/theme_dark"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvThemeLabel"
+        app:layout_constraintStart_toEndOf="@id/btnThemeLight"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Font Size Section -->
     <TextView
@@ -66,56 +61,88 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/padding_large"
-        app:layout_constraintTop_toBottomOf="@id/rgTheme"
+        app:layout_constraintTop_toBottomOf="@id/btnThemeLight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/tvFontSizeValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/font_size_medium"
-        android:textSize="16sp"
-        android:textAlignment="center"
+    <Button
+        android:id="@+id/btnFontSmall"
+        style="@style/SettingsOptionButton"
+        android:text="@string/font_size_small"
         android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
         app:layout_constraintTop_toBottomOf="@id/tvFontSizeLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@id/btnFontMedium"/>
 
-    <SeekBar
-        android:id="@+id/seekBarFontSize"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="3"
-        android:progress="1"
+    <Button
+        android:id="@+id/btnFontMedium"
+        style="@style/SettingsOptionButton"
+        android:text="@string/font_size_medium"
         android:layout_marginTop="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/tvFontSizeValue"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvFontSizeLabel"
+        app:layout_constraintStart_toEndOf="@id/btnFontSmall"
+        app:layout_constraintEnd_toStartOf="@id/btnFontLarge"/>
+
+    <Button
+        android:id="@+id/btnFontLarge"
+        style="@style/SettingsOptionButton"
+        android:text="@string/font_size_large"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvFontSizeLabel"
+        app:layout_constraintStart_toEndOf="@id/btnFontMedium"
+        app:layout_constraintEnd_toStartOf="@id/btnFontXLarge"/>
+
+    <Button
+        android:id="@+id/btnFontXLarge"
+        style="@style/SettingsOptionButton"
+        android:text="@string/font_size_extra_large"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvFontSizeLabel"
+        app:layout_constraintStart_toEndOf="@id/btnFontLarge"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/AppButton.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
         android:layout_marginTop="@dimen/padding_large"
         android:layout_marginEnd="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/seekBarFontSize"
+        app:layout_constraintTop_toBottomOf="@id/btnFontSmall"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnApply"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@id/btnApply"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnApply"
+        style="@style/AppButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/apply"
         android:layout_marginTop="@dimen/padding_large"
         android:layout_marginStart="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/seekBarFontSize"
+        app:layout_constraintTop_toBottomOf="@id/btnFontSmall"
         app:layout_constraintStart_toEndOf="@id/btnCancel"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Version -->
+    <TextView
+        android:id="@+id/tvVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/padding_large"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

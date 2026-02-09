@@ -41,9 +41,18 @@ bin/
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+/app/build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
 *.apk
 *.aab
+
+# Android build outputs
+**/build/
+**/app/build/
+
+###AI###
+.claude/
+CLAUDE.md
