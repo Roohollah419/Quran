@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     android:padding="@dimen/padding_large">
 
-    <ImageButton
-        android:id="@+id/btnSettings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_settings"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/settings"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <!-- Random Ayah in the center -->
     <TextView
         android:id="@+id/tvRandomAyahArabic"
