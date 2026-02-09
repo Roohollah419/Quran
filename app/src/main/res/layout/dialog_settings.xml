@@ -96,7 +96,7 @@
     <!-- Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/AppButton.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
@@ -108,6 +108,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnApply"
+        style="@style/AppButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/apply"
