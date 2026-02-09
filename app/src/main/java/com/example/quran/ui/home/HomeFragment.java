@@ -25,6 +25,7 @@ public class HomeFragment extends BaseFragment {
     private HomeViewModel viewModel;
     private SettingsManager settingsManager;
     private TextView tvRandomAyahArabic;
+    private TextView tvAyahInfo;
     private View btnSkip;
     private View btnFeelingLucky;
 
@@ -36,6 +37,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void setupUI(View view) {
         tvRandomAyahArabic = view.findViewById(R.id.tvRandomAyahArabic);
+        tvAyahInfo = view.findViewById(R.id.tvAyahInfo);
         btnSkip = view.findViewById(R.id.btnSkip);
         btnFeelingLucky = view.findViewById(R.id.btnFeelingLucky);
 
@@ -78,6 +80,14 @@ public class HomeFragment extends BaseFragment {
         viewModel.getRandomAyah().observe(getViewLifecycleOwner(), ayah -> {
             if (ayah != null) {
                 tvRandomAyahArabic.setText(ayah.getTextArabic());
+
+                // Get Surah information to display Surah name
+                viewModel.getSurahByNumber(ayah.getSurahNumber()).observe(getViewLifecycleOwner(), surah -> {
+                    if (surah != null) {
+                        String ayahInfo = surah.getNameEnglish() + " - Ayah " + ayah.getAyahNumber();
+                        tvAyahInfo.setText(ayahInfo);
+                    }
+                });
             }
         });
     }

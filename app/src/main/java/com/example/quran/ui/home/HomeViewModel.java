@@ -3,6 +3,7 @@ package com.example.quran.ui.home;
 import androidx.lifecycle.LiveData;
 
 import com.example.quran.data.model.Ayah;
+import com.example.quran.data.model.Surah;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseViewModel;
 
@@ -20,6 +21,13 @@ public class HomeViewModel extends BaseViewModel {
      */
     public LiveData<Ayah> getRandomAyah() {
         return repository.getRandomAyah();
+    }
+
+    /**
+     * Get a Surah by its number.
+     */
+    public LiveData<Surah> getSurahByNumber(int surahNumber) {
+        return repository.getSurahByNumber(surahNumber);
     }
 
     /**
