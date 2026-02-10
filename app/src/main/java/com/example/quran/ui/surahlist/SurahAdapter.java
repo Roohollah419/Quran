@@ -2,9 +2,11 @@ package com.example.quran.ui.surahlist;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Surah;
+import com.example.quran.utils.SettingsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,8 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
     private OnSurahClickListener listener;
     private float fontSizeMultiplier;
     private Typeface arabicTypeface;
+    private SettingsManager settingsManager;
+    private Context context;
 
     public interface OnSurahClickListener {
         void onSurahClick(Surah surah);
@@ -34,7 +39,9 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
     public SurahAdapter(OnSurahClickListener listener, float fontSizeMultiplier, Context context) {
         this.listener = listener;
         this.fontSizeMultiplier = fontSizeMultiplier;
+        this.context = context;
         this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
+        this.settingsManager = new SettingsManager(context);
     }
 
     @NonNull
@@ -61,20 +68,18 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
     }
 
     class SurahViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvNumber;
-        private TextView tvNameArabic;
-        private TextView tvNameEnglish;
-        private TextView tvTranslation;
+        private LinearLayout layoutSurahItem;
+        private TextView tvSurahName;
         private TextView tvAyahCount;
+        private TextView tvNumber;
         private TextView tvRevelationType;
 
         public SurahViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNumber = itemView.findViewById(R.id.tvSurahNumber);
-            tvNameArabic = itemView.findViewById(R.id.tvSurahNameArabic);
-            tvNameEnglish = itemView.findViewById(R.id.tvSurahNameEnglish);
-            tvTranslation = itemView.findViewById(R.id.tvSurahTranslation);
+            layoutSurahItem = itemView.findViewById(R.id.layoutSurahItem);
+            tvSurahName = itemView.findViewById(R.id.tvSurahName);
             tvAyahCount = itemView.findViewById(R.id.tvAyahCount);
+            tvNumber = itemView.findViewById(R.id.tvSurahNumber);
             tvRevelationType = itemView.findViewById(R.id.tvRevelationType);
 
             itemView.setOnClickListener(v -> {
@@ -86,25 +91,76 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
         }
 
         public void bind(Surah surah) {
-            tvNumber.setText(String.valueOf(surah.getNumber()));
-            tvNameArabic.setText(surah.getNameArabic());
-            tvNameEnglish.setText(surah.getNameEnglish());
-            tvTranslation.setText(surah.getTranslation());
-            tvAyahCount.setText(itemView.getContext().getString(R.string.ayah_count, surah.getTotalAyahs()));
-            tvRevelationType.setText(surah.getRevelationType());
+            boolean isArabic = settingsManager.isArabicLanguage();
+
+            // Set layout direction based on language
+            if (isArabic) {
+                layoutSurahItem.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            } else {
+                layoutSurahItem.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+
+            // Set Surah name
+            if (isArabic) {
+                tvSurahName.setText(surah.getNameArabic());
+                if (arabicTypeface != null) {
+                    tvSurahName.setTypeface(arabicTypeface);
+                }
+            } else {
+                tvSurahName.setText(surah.getNameEnglish());
+                tvSurahName.setTypeface(Typeface.DEFAULT);
+            }
+
+            // Set ayah count
+            String ayahCount = String.valueOf(surah.getTotalAyahs());
+            if (isArabic) {
+                tvAyahCount.setText(convertToArabicNumerals(ayahCount));
+            } else {
+                tvAyahCount.setText(ayahCount);
+            }
+
+            // Set surah number
+            String surahNumber = String.valueOf(surah.getNumber());
+            if (isArabic) {
+                tvNumber.setText(convertToArabicNumerals(surahNumber));
+            } else {
+                tvNumber.setText(surahNumber);
+            }
+
+            // Set revelation type
+            String revelationType = surah.getRevelationType();
+            if (isArabic) {
+                if (revelationType.equalsIgnoreCase("Meccan")) {
+                    tvRevelationType.setText(context.getString(R.string.meccan_ar));
+                } else {
+                    tvRevelationType.setText(context.getString(R.string.medinan_ar));
+                }
+                if (arabicTypeface != null) {
+                    tvRevelationType.setTypeface(arabicTypeface);
+                }
+            } else {
+                tvRevelationType.setText(revelationType);
+                tvRevelationType.setTypeface(Typeface.DEFAULT);
+            }
 
             // Apply font size
-            tvNumber.setTextSize(18 * fontSizeMultiplier);
-            tvNameArabic.setTextSize(18 * fontSizeMultiplier);
-            tvNameEnglish.setTextSize(14 * fontSizeMultiplier);
-            tvTranslation.setTextSize(12 * fontSizeMultiplier);
-            tvAyahCount.setTextSize(12 * fontSizeMultiplier);
-            tvRevelationType.setTextSize(12 * fontSizeMultiplier);
+            tvSurahName.setTextSize(18 * fontSizeMultiplier);
+            tvAyahCount.setTextSize(16 * fontSizeMultiplier);
+            tvNumber.setTextSize(16 * fontSizeMultiplier);
+            tvRevelationType.setTextSize(16 * fontSizeMultiplier);
+        }
 
-            // Apply Uthman Taha Naskh font to Arabic text
-            if (arabicTypeface != null) {
-                tvNameArabic.setTypeface(arabicTypeface);
+        private String convertToArabicNumerals(String number) {
+            char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
+            StringBuilder result = new StringBuilder();
+            for (char c : number.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    result.append(arabicNumerals[c - '0']);
+                } else {
+                    result.append(c);
+                }
             }
+            return result.toString();
         }
     }
 }

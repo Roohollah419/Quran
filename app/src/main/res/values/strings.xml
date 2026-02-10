@@ -22,6 +22,9 @@
     <string name="theme">Theme</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+    <string name="language">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">Arabic</string>
     <string name="font_size">Font Size</string>
     <string name="font_size_small">S</string>
     <string name="font_size_medium">M</string>
@@ -35,4 +38,16 @@
     <!-- General -->
     <string name="loading">Loading…</string>
     <string name="error">Error occurred</string>
+
+    <!-- Surah List Headers -->
+    <string name="header_surah_name">Surah</string>
+    <string name="header_surah_name_ar">السورة</string>
+    <string name="header_ayah_count">Verses</string>
+    <string name="header_ayah_count_ar">أرقم الصفحة</string>
+    <string name="header_surah_number">No.</string>
+    <string name="header_surah_number_ar">رقم</string>
+    <string name="header_revelation_type">Type</string>
+    <string name="header_revelation_type_ar">نوع</string>
+    <string name="meccan_ar">مكية</string>
+    <string name="medinan_ar">مدنية</string>
 </resources>

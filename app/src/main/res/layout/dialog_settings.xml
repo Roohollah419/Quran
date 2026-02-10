@@ -52,6 +52,39 @@
         app:layout_constraintStart_toEndOf="@id/btnThemeLight"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Language Section -->
+    <TextView
+        android:id="@+id/tvLanguageLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/language"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/padding_large"
+        app:layout_constraintTop_toBottomOf="@id/btnThemeLight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btnLanguageEnglish"
+        style="@style/SettingsOptionButton"
+        android:text="@string/language_english"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvLanguageLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnLanguageArabic"/>
+
+    <Button
+        android:id="@+id/btnLanguageArabic"
+        style="@style/SettingsOptionButton"
+        android:text="@string/language_arabic"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvLanguageLabel"
+        app:layout_constraintStart_toEndOf="@id/btnLanguageEnglish"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Font Size Section -->
     <TextView
         android:id="@+id/tvFontSizeLabel"
@@ -61,7 +94,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/padding_large"
-        app:layout_constraintTop_toBottomOf="@id/btnThemeLight"
+        app:layout_constraintTop_toBottomOf="@id/btnLanguageEnglish"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

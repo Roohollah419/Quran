@@ -25,6 +25,7 @@ public class SettingsDialogFragment extends DialogFragment {
 
     private SettingsManager settingsManager;
     private Button btnThemeLight, btnThemeDark;
+    private Button btnLanguageEnglish, btnLanguageArabic;
     private Button btnFontSmall, btnFontMedium, btnFontLarge, btnFontXLarge;
     private TextView tvVersion;
     private MaterialButton btnApply, btnCancel;
@@ -62,6 +63,8 @@ public class SettingsDialogFragment extends DialogFragment {
         // Initialize views
         btnThemeLight = view.findViewById(R.id.btnThemeLight);
         btnThemeDark = view.findViewById(R.id.btnThemeDark);
+        btnLanguageEnglish = view.findViewById(R.id.btnLanguageEnglish);
+        btnLanguageArabic = view.findViewById(R.id.btnLanguageArabic);
         btnFontSmall = view.findViewById(R.id.btnFontSmall);
         btnFontMedium = view.findViewById(R.id.btnFontMedium);
         btnFontLarge = view.findViewById(R.id.btnFontLarge);
@@ -100,6 +103,13 @@ public class SettingsDialogFragment extends DialogFragment {
             selectThemeButton(btnThemeLight);
         }
 
+        // Load language
+        if (settingsManager.isArabicLanguage()) {
+            selectLanguageButton(btnLanguageArabic);
+        } else {
+            selectLanguageButton(btnLanguageEnglish);
+        }
+
         // Load font size
         selectedFontSize = settingsManager.getFontSize();
         selectFontSizeButton(selectedFontSize);
@@ -109,6 +119,10 @@ public class SettingsDialogFragment extends DialogFragment {
         // Theme button listeners
         btnThemeLight.setOnClickListener(v -> selectThemeButton(btnThemeLight));
         btnThemeDark.setOnClickListener(v -> selectThemeButton(btnThemeDark));
+
+        // Language button listeners
+        btnLanguageEnglish.setOnClickListener(v -> selectLanguageButton(btnLanguageEnglish));
+        btnLanguageArabic.setOnClickListener(v -> selectLanguageButton(btnLanguageArabic));
 
         // Font size button listeners
         btnFontSmall.setOnClickListener(v -> {
@@ -146,6 +160,11 @@ public class SettingsDialogFragment extends DialogFragment {
         btnThemeDark.setSelected(selectedButton == btnThemeDark);
     }
 
+    private void selectLanguageButton(Button selectedButton) {
+        btnLanguageEnglish.setSelected(selectedButton == btnLanguageEnglish);
+        btnLanguageArabic.setSelected(selectedButton == btnLanguageArabic);
+    }
+
     private void selectFontSizeButton(int fontSize) {
         btnFontSmall.setSelected(fontSize == 0);
         btnFontMedium.setSelected(fontSize == 1);
@@ -168,6 +187,10 @@ public class SettingsDialogFragment extends DialogFragment {
         // Save theme
         String theme = btnThemeDark.isSelected() ? SettingsManager.THEME_DARK : SettingsManager.THEME_LIGHT;
         settingsManager.setTheme(theme);
+
+        // Save language
+        String language = btnLanguageArabic.isSelected() ? SettingsManager.LANGUAGE_ARABIC : SettingsManager.LANGUAGE_ENGLISH;
+        settingsManager.setLanguage(language);
 
         // Save font size
         settingsManager.setFontSize(selectedFontSize);
