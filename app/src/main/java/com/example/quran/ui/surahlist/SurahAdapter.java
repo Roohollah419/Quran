@@ -2,10 +2,12 @@ package com.example.quran.ui.surahlist;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,8 @@ import com.example.quran.R;
 import com.example.quran.data.model.Surah;
 import com.example.quran.utils.SettingsManager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +76,7 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
         private TextView tvSurahName;
         private TextView tvAyahCount;
         private TextView tvNumber;
-        private TextView tvRevelationType;
+        private ImageView ivRevelationType;
 
         public SurahViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,7 +84,7 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
             tvSurahName = itemView.findViewById(R.id.tvSurahName);
             tvAyahCount = itemView.findViewById(R.id.tvAyahCount);
             tvNumber = itemView.findViewById(R.id.tvSurahNumber);
-            tvRevelationType = itemView.findViewById(R.id.tvRevelationType);
+            ivRevelationType = itemView.findViewById(R.id.ivRevelationType);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -127,27 +131,26 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
                 tvNumber.setText(surahNumber);
             }
 
-            // Set revelation type
+            // Set revelation type icon
             String revelationType = surah.getRevelationType();
-            if (isArabic) {
+            try {
+                InputStream inputStream;
                 if (revelationType.equalsIgnoreCase("Meccan")) {
-                    tvRevelationType.setText(context.getString(R.string.meccan_ar));
+                    inputStream = context.getAssets().open("mecca.png");
                 } else {
-                    tvRevelationType.setText(context.getString(R.string.medinan_ar));
+                    inputStream = context.getAssets().open("madina.png");
                 }
-                if (arabicTypeface != null) {
-                    tvRevelationType.setTypeface(arabicTypeface);
-                }
-            } else {
-                tvRevelationType.setText(revelationType);
-                tvRevelationType.setTypeface(Typeface.DEFAULT);
+                Drawable drawable = Drawable.createFromStream(inputStream, null);
+                ivRevelationType.setImageDrawable(drawable);
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             // Apply font size
             tvSurahName.setTextSize(18 * fontSizeMultiplier);
             tvAyahCount.setTextSize(16 * fontSizeMultiplier);
             tvNumber.setTextSize(16 * fontSizeMultiplier);
-            tvRevelationType.setTextSize(16 * fontSizeMultiplier);
         }
 
         private String convertToArabicNumerals(String number) {

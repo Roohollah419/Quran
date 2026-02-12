@@ -8,7 +8,7 @@
     android:padding="12dp"
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:layoutDirection="ltr">
+    android:layoutDirection="rtl">
 
     <!-- Surah Name -->
     <TextView
@@ -19,6 +19,7 @@
         android:text="الفاتحة"
         android:textSize="18sp"
         android:fontFamily="@font/uthmantaha"
+        android:textDirection="rtl"
         android:gravity="start"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"/>
@@ -37,6 +38,7 @@
         android:layout_weight="0.6"
         android:text="1"
         android:textSize="16sp"
+        android:textDirection="ltr"
         android:gravity="center"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"/>
@@ -55,6 +57,7 @@
         android:layout_weight="0.8"
         android:text="7"
         android:textSize="16sp"
+        android:textDirection="ltr"
         android:gravity="center"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"/>
@@ -66,16 +69,14 @@
         android:background="@color/divider"/>
 
     <!-- Revelation Type -->
-    <TextView
-        android:id="@+id/tvRevelationType"
+    <ImageView
+        android:id="@+id/ivRevelationType"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_weight="1"
-        android:text="مكية"
-        android:textSize="16sp"
-        android:fontFamily="@font/uthmantaha"
-        android:gravity="center"
+        android:scaleType="centerInside"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"/>
+        android:paddingStart="8dp"
+        android:contentDescription="@string/app_name"/>
 
 </LinearLayout>
