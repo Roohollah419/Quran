@@ -23,7 +23,10 @@
         android:fontFamily="@font/uthmantaha"
         android:gravity="start"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"/>
+        android:paddingStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
 
     <!-- Divider -->
     <View
@@ -45,7 +48,10 @@
         android:fontFamily="@font/uthmantaha"
         android:gravity="center"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"/>
+        android:paddingStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
 
     <!-- Divider -->
     <View
@@ -67,7 +73,10 @@
         android:fontFamily="@font/uthmantaha"
         android:gravity="center"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"/>
+        android:paddingStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
 
     <!-- Divider -->
     <View
@@ -89,6 +98,9 @@
         android:fontFamily="@font/uthmantaha"
         android:gravity="center"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"/>
+        android:paddingStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
 
 </LinearLayout>

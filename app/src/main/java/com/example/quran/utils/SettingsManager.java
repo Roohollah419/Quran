@@ -114,7 +114,7 @@ public class SettingsManager {
      * @return LANGUAGE_ENGLISH or LANGUAGE_ARABIC
      */
     public String getLanguage() {
-        return preferences.getString(KEY_LANGUAGE, LANGUAGE_ENGLISH);
+        return preferences.getString(KEY_LANGUAGE, LANGUAGE_ARABIC);
     }
 
     /**

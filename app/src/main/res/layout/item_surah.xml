@@ -6,9 +6,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="?attr/selectableItemBackground"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/bg_surah_item"
     android:gravity="center_vertical"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:elevation="2dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <!-- Surah Name -->
     <TextView
