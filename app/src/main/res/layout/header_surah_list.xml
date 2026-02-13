@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:fontFamily="@font/uthmantaha"
-        android:gravity="start"
+        android:gravity="center"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:clickable="true"

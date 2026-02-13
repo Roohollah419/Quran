@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutSurahItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:background="@drawable/bg_surah_item"
-    android:gravity="center_vertical"
-    android:layoutDirection="rtl"
-    android:elevation="2dp"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_marginBottom="4dp">
+
+    <!-- Background frame image -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:src="@drawable/luxury_frame"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"/>
+
+    <!-- Content layout -->
+    <LinearLayout
+        android:id="@+id/layoutSurahItem"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:layoutDirection="rtl"
+        android:clickable="true"
+        android:focusable="true">
 
     <!-- Surah Name -->
     <TextView
@@ -28,7 +39,7 @@
         android:textColor="#000000"
         android:fontFamily="@font/uthmantaha"
         android:textDirection="rtl"
-        android:gravity="start"
+        android:gravity="center"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"/>
 
@@ -89,4 +100,5 @@
         android:paddingStart="8dp"
         android:contentDescription="@string/app_name"/>
 
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

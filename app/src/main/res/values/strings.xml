@@ -43,7 +43,7 @@
     <string name="header_surah_name">Surah</string>
     <string name="header_surah_name_ar">السورة</string>
     <string name="header_ayah_count">Verses</string>
-    <string name="header_ayah_count_ar">أرقم الصفحة</string>
+    <string name="header_ayah_count_ar">آیاتها</string>
     <string name="header_surah_number">No.</string>
     <string name="header_surah_number_ar">رقم</string>
     <string name="header_revelation_type">Type</string>
