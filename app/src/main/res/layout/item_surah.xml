@@ -37,7 +37,7 @@
         android:layout_weight="2"
         android:text="الفاتحة"
         android:textSize="18sp"
-        android:textColor="#000000"
+        android:textColor="?android:attr/textColorPrimary"
         android:fontFamily="@font/uthmantaha"
         android:textDirection="rtl"
         android:gravity="center"
@@ -48,7 +48,8 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/divider"/>
+        android:background="?android:attr/textColorSecondary"
+        android:alpha="0.3"/>
 
     <!-- Surah Number -->
     <TextView
@@ -58,7 +59,7 @@
         android:layout_weight="0.6"
         android:text="1"
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:textColor="?android:attr/textColorPrimary"
         android:textDirection="ltr"
         android:gravity="center"
         android:paddingEnd="8dp"
@@ -68,7 +69,8 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/divider"/>
+        android:background="?android:attr/textColorSecondary"
+        android:alpha="0.3"/>
 
     <!-- Ayah Count -->
     <TextView
@@ -78,7 +80,7 @@
         android:layout_weight="0.8"
         android:text="7"
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:textColor="?android:attr/textColorPrimary"
         android:textDirection="ltr"
         android:gravity="center"
         android:paddingEnd="8dp"
@@ -88,7 +90,8 @@
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/divider"/>
+        android:background="?android:attr/textColorSecondary"
+        android:alpha="0.3"/>
 
     <!-- Revelation Type -->
     <ImageView
