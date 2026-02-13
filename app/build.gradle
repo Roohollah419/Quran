@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'jacoco'
 }
 
 android {
@@ -33,6 +34,11 @@ android {
             includeAndroidResources = true
             returnDefaultValues = true
         }
+    }
+
+    buildTypes.each {
+        it.enableAndroidTestCoverage = true
+        it.enableUnitTestCoverage = true
     }
 }
 
@@ -79,4 +85,39 @@ tasks.whenTaskAdded { task ->
     if (task.name == 'assembleRelease') {
         task.dependsOn 'testReleaseUnitTest'
     }
+}
+
+// JaCoCo test coverage task
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*$ViewInjector*.*',
+            '**/*$ViewBinder*.*',
+            '**/databinding/*',
+            '**/android/databinding/*',
+            '**/androidx/databinding/*',
+            '**/BR.*'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: buildDir, includes: [
+            'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+            'jacoco/testDebugUnitTest.exec'
+    ]))
 }
