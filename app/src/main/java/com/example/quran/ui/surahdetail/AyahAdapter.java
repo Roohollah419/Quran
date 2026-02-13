@@ -1,7 +1,9 @@
 package com.example.quran.ui.surahdetail;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
+import com.example.quran.utils.SettingsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +28,14 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
     private List<Ayah> ayahs = new ArrayList<>();
     private float fontSizeMultiplier;
     private Typeface arabicTypeface;
+    private Context context;
+    private SettingsManager settingsManager;
 
     public AyahAdapter(float fontSizeMultiplier, Context context) {
         this.fontSizeMultiplier = fontSizeMultiplier;
+        this.context = context;
         this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
+        this.settingsManager = new SettingsManager(context);
     }
 
     @NonNull
@@ -67,9 +74,20 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         }
 
         public void bind(Ayah ayah) {
-            tvAyahNumber.setText(String.valueOf(ayah.getAyahNumber()));
+            // Convert ayah number to Arabic numerals
+            String ayahNumber = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+            tvAyahNumber.setText(ayahNumber);
             tvAyahArabic.setText(ayah.getTextArabic());
             tvAyahTranslation.setText(ayah.getTextTranslation());
+
+            // Set ayah number background based on theme
+            Drawable drawable;
+            if (settingsManager.isDarkTheme()) {
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.ayah_number_dark, null);
+            } else {
+                drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.ayah_number_light, null);
+            }
+            tvAyahNumber.setBackground(drawable);
 
             // Apply font size
             tvAyahNumber.setTextSize(14 * fontSizeMultiplier);
@@ -80,6 +98,19 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             if (arabicTypeface != null) {
                 tvAyahArabic.setTypeface(arabicTypeface);
             }
+        }
+
+        private String convertToArabicNumerals(String number) {
+            char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
+            StringBuilder result = new StringBuilder();
+            for (char c : number.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    result.append(arabicNumerals[c - '0']);
+                } else {
+                    result.append(c);
+                }
+            }
+            return result.toString();
         }
     }
 }
