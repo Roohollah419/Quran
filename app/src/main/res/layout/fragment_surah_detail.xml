@@ -5,40 +5,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvSurahName"
+    <!-- Surah Header with Frame -->
+    <FrameLayout
+        android:id="@+id/frameLayoutSurahHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary"
-        android:textAlignment="center"
-        android:fontFamily="serif"
-        android:padding="@dimen/padding_medium"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/tvSurahInfo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        android:paddingStart="@dimen/padding_medium"
-        android:paddingEnd="@dimen/padding_medium"
-        android:paddingBottom="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/tvSurahName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Frame Image Background -->
+        <ImageView
+            android:id="@+id/ivSurahFrame"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:src="@drawable/surah_frame"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/app_name"/>
+
+        <!-- Surah Details Overlay -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvSurahName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvSurahInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:gravity="center"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"/>
+
+            <ImageView
+                android:id="@+id/ivRevelationType"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/app_name"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAyahs"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/tvSurahInfo"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/frameLayoutSurahHeader"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
