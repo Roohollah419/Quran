@@ -1,9 +1,11 @@
 package com.example.quran;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -31,15 +33,7 @@ public class MainActivity extends BaseActivity {
     protected void setupUI() {
         setContentView(R.layout.activity_main);
 
-        // Setup Navigation Component
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment);
-
-        if (navHostFragment != null) {
-            navController = navHostFragment.getNavController();
-        }
-
-        // Setup Settings button
+        // Setup Settings button FIRST
         btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v -> {
             SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
@@ -48,6 +42,27 @@ public class MainActivity extends BaseActivity {
             });
             dialog.show(getSupportFragmentManager(), "SettingsDialog");
         });
+
+        // Setup Navigation Component
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment);
+
+        if (navHostFragment != null) {
+            navController = navHostFragment.getNavController();
+
+            // Listen for navigation changes to update settings icon color
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.surahListFragment) {
+                    // White icon for Surah list page (green header background)
+                    btnSettings.setImageTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(this, android.R.color.white)));
+                } else {
+                    // Default primary color for other pages
+                    btnSettings.setImageTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(this, R.color.primary)));
+                }
+            });
+        }
     }
 
     @Override
