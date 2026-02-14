@@ -67,6 +67,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showSettingsDialog() {
+        // Check if dialog is already showing
+        SettingsDialogFragment existingDialog = (SettingsDialogFragment)
+                getSupportFragmentManager().findFragmentByTag("SettingsDialog");
+        if (existingDialog != null && existingDialog.isVisible()) {
+            return; // Dialog already showing, don't create another
+        }
+
         SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
             // Mark that settings dialog should reopen after recreation
             getIntent().putExtra("REOPEN_SETTINGS", true);
@@ -83,7 +90,16 @@ public class MainActivity extends BaseActivity {
         if (getIntent().getBooleanExtra("REOPEN_SETTINGS", false)) {
             getIntent().removeExtra("REOPEN_SETTINGS");
             // Post to ensure activity is fully ready
-            btnSettings.post(() -> showSettingsDialog());
+            btnSettings.post(() -> {
+                // Dismiss any existing dialog fragments first
+                SettingsDialogFragment existingDialog = (SettingsDialogFragment)
+                        getSupportFragmentManager().findFragmentByTag("SettingsDialog");
+                if (existingDialog != null) {
+                    existingDialog.dismissAllowingStateLoss();
+                }
+                // Show new dialog
+                showSettingsDialog();
+            });
         }
     }
 
