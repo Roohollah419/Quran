@@ -2,13 +2,16 @@ package com.example.quran.ui.settings;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,8 +32,10 @@ public class SettingsDialogFragment extends DialogFragment {
     private Button btnLanguageEnglish, btnLanguageArabic;
     private Button btnFontSmall, btnFontMedium, btnFontLarge, btnFontXLarge;
     private TextView tvVersion;
+    private LinearLayout layoutGithub;
 
     private OnSettingsChangedListener listener;
+    private static final String GITHUB_URL = "https://github.com/Roohollah419/Quran";
 
     public interface OnSettingsChangedListener {
         void onSettingsChanged();
@@ -69,9 +74,13 @@ public class SettingsDialogFragment extends DialogFragment {
         btnFontLarge = view.findViewById(R.id.btnFontLarge);
         btnFontXLarge = view.findViewById(R.id.btnFontXLarge);
         tvVersion = view.findViewById(R.id.tvVersion);
+        layoutGithub = view.findViewById(R.id.layoutGithub);
 
         // Set version
         setVersionText();
+
+        // Setup GitHub link
+        setupGithubLink();
 
         // Load current settings
         loadCurrentSettings();
@@ -210,5 +219,13 @@ public class SettingsDialogFragment extends DialogFragment {
         } catch (PackageManager.NameNotFoundException e) {
             tvVersion.setText(getString(R.string.version_format, "1.0"));
         }
+    }
+
+    private void setupGithubLink() {
+        layoutGithub.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(GITHUB_URL));
+            startActivity(intent);
+        });
     }
 }
