@@ -40,6 +40,15 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/tvSurahInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
                     android:id="@+id/tvSurahName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,22 +58,13 @@
                     android:textColor="?android:attr/textColorPrimary"
                     android:gravity="center"/>
 
-                <TextView
-                    android:id="@+id/tvSurahInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"/>
-
                 <ImageView
                     android:id="@+id/ivRevelationType"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:scaleType="centerInside"
-                    android:contentDescription="@string/app_name"/>
+                    android:contentDescription="@string/app_name"
+                    android:layout_marginStart="8dp"/>
 
             </LinearLayout>
 
