@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'jacoco'
 }
 
 android {
@@ -13,6 +14,7 @@ android {
         targetSdk 36
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -25,6 +27,18 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+
+    buildTypes.each {
+        it.enableAndroidTestCoverage = true
+        it.enableUnitTestCoverage = true
     }
 }
 
@@ -51,4 +65,59 @@ dependencies {
 
     // Gson for JSON parsing
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Testing dependencies
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.room:room-testing:2.6.1'
+}
+
+// Run tests before assembling debug build
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleDebug') {
+        task.dependsOn 'testDebugUnitTest'
+    }
+    if (task.name == 'assembleRelease') {
+        task.dependsOn 'testReleaseUnitTest'
+    }
+}
+
+// JaCoCo test coverage task
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*$ViewInjector*.*',
+            '**/*$ViewBinder*.*',
+            '**/databinding/*',
+            '**/android/databinding/*',
+            '**/androidx/databinding/*',
+            '**/BR.*'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: buildDir, includes: [
+            'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+            'jacoco/testDebugUnitTest.exec'
+    ]))
 }

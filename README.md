@@ -4,26 +4,36 @@ A modern Android application for reading and exploring the Holy Quran with a cle
 
 ## About
 
-This is a native Android application that provides access to the complete text of the Holy Quran in Arabic with English translations. The app features all 114 Surahs with 6,236 verses, offering a seamless reading experience with customizable themes and font sizes.
+This is a native Android application that provides access to the complete text of the Holy Quran in Arabic with English translations. The app features all 114 Surahs with 6,236 verses, offering a seamless reading experience with the authentic Uthmani Taha Naskh font, customizable themes, adjustable font sizes, and a clean, distraction-free interface designed for comfortable reading.
 
 ## Features
 
 - **Complete Quran Text**: All 114 Surahs with full Arabic text and English translations
+- **Uthmani Taha Naskh Font**: Authentic Uthman Taha Naskh typeface for beautiful Arabic text rendering
+- **Bismillah Display**: Automatic Bismillah (بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ) at the beginning of each Surah (except Surah 1 and 9)
+- **Arabic Numerals**: Ayah numbers displayed in Arabic numerals (٠-٩) inline with the text
+- **Compact Card Design**: Minimalist, flat ayah cards with optimal spacing for distraction-free reading
 - **Random Ayah Display**: Discover a new verse every time you open the app
 - **I'm Feeling Lucky**: Navigate to a random Surah for spontaneous exploration
 - **Dark/Light Themes**: Switch between themes for comfortable reading in any lighting condition
 - **Adjustable Font Sizes**: Four font size options (Small, Medium, Large, Extra Large) for optimal readability
-- **Arabic Naskh Font**: Beautiful serif typeface for authentic Arabic text rendering
+- **Surah Name Display**: Toggle between English and Arabic names for Surahs in the list view
+- **Collapsing Header**: Beautiful framed Surah header that collapses on scroll for maximum reading space
 - **Offline Access**: All Quran data stored locally in Room database for instant access without internet
-- **Clean Material Design**: Modern UI following Material Design guidelines
+- **Clean Material Design**: Modern UI following Material Design guidelines with immediate settings application
 - **Fragment-based Navigation**: Smooth transitions between screens
+- **GitHub Integration**: Direct link to project repository in settings
 
 ## Screenshots
 
 The app includes three main screens:
 - **Home Screen**: Random Ayah display with quick navigation options
-- **Surah List**: Browse all 114 Surahs with metadata (name, verse count, revelation type)
-- **Surah Detail**: Read complete Surahs with individual verses
+- **Surah List**: Browse all 114 Surahs with metadata (name in English/Arabic, verse count, revelation type)
+- **Surah Detail**: Read complete Surahs with beautifully formatted verses in Uthmani Taha Naskh font, featuring:
+  - Collapsing header with Surah name, ayah count, and revelation type icon
+  - Bismillah at the beginning (for applicable Surahs)
+  - Compact ayah cards with inline Arabic numerals
+  - Minimal borders and optimal spacing for distraction-free reading
 
 ## Requirements
 
@@ -37,8 +47,8 @@ The app includes three main screens:
 ### Target Devices
 
 - **Minimum SDK**: API 24 (Android 7.0 Nougat)
-- **Target SDK**: API 34 (Android 14)
-- **Compile SDK**: API 34
+- **Target SDK**: API 36 (Android 15)
+- **Compile SDK**: API 36
 
 ## Project Structure
 
@@ -91,7 +101,9 @@ The app follows **MVVM (Model-View-ViewModel)** architecture pattern with clean 
 - **LiveData**: Observable data holder for reactive UI updates
 - **Navigation Component**: Fragment navigation and argument passing
 - **Material Components**: Modern UI components following Material Design
+- **CoordinatorLayout & AppBarLayout**: Collapsing header with smooth scroll behavior
 - **RecyclerView**: Efficient list rendering for Surahs and Ayahs
+- **Custom Fonts**: Uthmani Taha Naskh font for authentic Quranic text rendering
 - **Gson**: JSON parsing for initial data loading
 
 ## Building the Application
@@ -185,12 +197,14 @@ The complete Quran data is loaded from `quran.json` file stored in the `assets` 
 
 ### Settings
 
-Users can customize the app through the Settings dialog (accessible via gear icon on home screen):
+Users can customize the app through the Settings dialog (accessible via gear icon):
 
 - **Theme**: Toggle between Light and Dark modes
+- **Surah Name**: Choose between English or Arabic names for Surahs in the list view
 - **Font Size**: Choose from 4 sizes (Small, Medium, Large, Extra Large)
+- **Version Info**: Display current app version with direct link to GitHub repository
 
-Settings are persisted using SharedPreferences and applied across all screens.
+All settings are applied immediately without requiring confirmation buttons. Settings are persisted using SharedPreferences and applied across all screens.
 
 ## Dependencies
 
@@ -236,14 +250,16 @@ implementation 'com.google.code.gson:gson:2.10.1'
 ## Future Enhancements
 
 Potential features for future releases:
-- Arabic transliteration
-- Multiple language translations
-- Audio recitation
-- Bookmarks and favorites
-- Search functionality
-- Verse sharing
-- Reading progress tracking
+- Multiple language translations (Urdu, French, etc.)
+- Arabic transliteration (Roman script)
+- Audio recitation with verse highlighting
+- Bookmarks and favorites system
+- Advanced search functionality (by keyword, Surah, Juz)
+- Verse sharing with custom graphics
+- Reading progress tracking and statistics
 - Tafsir (commentary) integration
+- Night reading mode with reduced blue light
+- Widget support for home screen
 
 ## License
 

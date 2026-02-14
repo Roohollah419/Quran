@@ -1,13 +1,16 @@
 package com.example.quran.ui.surahdetail;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +22,9 @@ import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.ViewModelFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Fragment displaying details of a specific Surah with its Ayahs.
  */
@@ -28,6 +34,7 @@ public class SurahDetailFragment extends BaseFragment {
     private SettingsManager settingsManager;
     private TextView tvSurahName;
     private TextView tvSurahInfo;
+    private ImageView ivRevelationType;
     private RecyclerView recyclerView;
     private AyahAdapter adapter;
 
@@ -42,13 +49,14 @@ public class SurahDetailFragment extends BaseFragment {
     protected void setupUI(View view) {
         tvSurahName = view.findViewById(R.id.tvSurahName);
         tvSurahInfo = view.findViewById(R.id.tvSurahInfo);
+        ivRevelationType = view.findViewById(R.id.ivRevelationType);
         recyclerView = view.findViewById(R.id.recyclerViewAyahs);
 
         // Setup SettingsManager
         settingsManager = new SettingsManager(requireContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier());
+        adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
         recyclerView.setAdapter(adapter);
 
         // Apply font size to header views
@@ -72,11 +80,39 @@ public class SurahDetailFragment extends BaseFragment {
     protected void observeData() {
         viewModel.getSurah().observe(getViewLifecycleOwner(), surah -> {
             if (surah != null) {
-                tvSurahName.setText(surah.getNameArabic() + " - " + surah.getNameEnglish());
-                tvSurahInfo.setText(getString(R.string.surah_info,
-                        surah.getTranslation(),
-                        surah.getTotalAyahs(),
-                        surah.getRevelationType()));
+                boolean isArabic = settingsManager.isArabicLanguage();
+
+                // Set surah name based on language
+                if (isArabic) {
+                    tvSurahName.setText(surah.getNameArabic());
+                    Typeface arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
+                    if (arabicTypeface != null) {
+                        tvSurahName.setTypeface(arabicTypeface);
+                    }
+                    // Show ayah count in Arabic numerals
+                    tvSurahInfo.setText(convertToArabicNumerals(String.valueOf(surah.getTotalAyahs())));
+                } else {
+                    tvSurahName.setText(surah.getNameEnglish());
+                    tvSurahName.setTypeface(Typeface.DEFAULT_BOLD);
+                    // Show ayah count in English numerals
+                    tvSurahInfo.setText(String.valueOf(surah.getTotalAyahs()));
+                }
+
+                // Load revelation type icon
+                String revelationType = surah.getRevelationType();
+                try {
+                    InputStream inputStream;
+                    if (revelationType.equalsIgnoreCase("Meccan")) {
+                        inputStream = requireContext().getAssets().open("mecca.png");
+                    } else {
+                        inputStream = requireContext().getAssets().open("madina.png");
+                    }
+                    Drawable drawable = Drawable.createFromStream(inputStream, null);
+                    ivRevelationType.setImageDrawable(drawable);
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -90,9 +126,19 @@ public class SurahDetailFragment extends BaseFragment {
     private void applyFontSize() {
         float multiplier = settingsManager.getFontSizeMultiplier();
         tvSurahName.setTextSize(24 * multiplier);
-        tvSurahInfo.setTextSize(14 * multiplier);
+        tvSurahInfo.setTextSize(20 * multiplier);
+    }
 
-        // Apply Naskh font to Arabic text
-        tvSurahName.setTypeface(Typeface.SERIF);
+    private String convertToArabicNumerals(String number) {
+        char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
+        StringBuilder result = new StringBuilder();
+        for (char c : number.toCharArray()) {
+            if (Character.isDigit(c)) {
+                result.append(arabicNumerals[c - '0']);
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 }

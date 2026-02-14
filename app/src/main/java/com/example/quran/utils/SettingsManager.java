@@ -11,6 +11,7 @@ public class SettingsManager {
     private static final String PREFS_NAME = "QuranPreferences";
     private static final String KEY_THEME = "theme";
     private static final String KEY_FONT_SIZE = "font_size";
+    private static final String KEY_LANGUAGE = "language";
 
     // Theme constants
     public static final String THEME_LIGHT = "light";
@@ -21,6 +22,10 @@ public class SettingsManager {
     public static final int FONT_SIZE_MEDIUM = 1;
     public static final int FONT_SIZE_LARGE = 2;
     public static final int FONT_SIZE_EXTRA_LARGE = 3;
+
+    // Language constants
+    public static final String LANGUAGE_ENGLISH = "english";
+    public static final String LANGUAGE_ARABIC = "arabic";
 
     private final SharedPreferences preferences;
 
@@ -102,5 +107,28 @@ public class SettingsManager {
             default:
                 return "Medium";
         }
+    }
+
+    /**
+     * Get current language setting.
+     * @return LANGUAGE_ENGLISH or LANGUAGE_ARABIC
+     */
+    public String getLanguage() {
+        return preferences.getString(KEY_LANGUAGE, LANGUAGE_ARABIC);
+    }
+
+    /**
+     * Set language preference.
+     * @param language LANGUAGE_ENGLISH or LANGUAGE_ARABIC
+     */
+    public void setLanguage(String language) {
+        preferences.edit().putString(KEY_LANGUAGE, language).apply();
+    }
+
+    /**
+     * Check if Arabic language is enabled.
+     */
+    public boolean isArabicLanguage() {
+        return LANGUAGE_ARABIC.equals(getLanguage());
     }
 }
