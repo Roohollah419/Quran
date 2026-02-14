@@ -36,11 +36,7 @@ public class MainActivity extends BaseActivity {
         // Setup Settings button FIRST
         btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v -> {
-            SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
-                // Recreate activity to apply theme change
-                recreate();
-            });
-            dialog.show(getSupportFragmentManager(), "SettingsDialog");
+            showSettingsDialog();
         });
 
         // Setup Navigation Component
@@ -68,6 +64,27 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void observeData() {
         // No data to observe in MainActivity
+    }
+
+    private void showSettingsDialog() {
+        SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
+            // Mark that settings dialog should reopen after recreation
+            getIntent().putExtra("REOPEN_SETTINGS", true);
+            // Recreate activity to apply changes immediately
+            recreate();
+        });
+        dialog.show(getSupportFragmentManager(), "SettingsDialog");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reopen settings dialog if it was open before recreation
+        if (getIntent().getBooleanExtra("REOPEN_SETTINGS", false)) {
+            getIntent().removeExtra("REOPEN_SETTINGS");
+            // Post to ensure activity is fully ready
+            btnSettings.post(() -> showSettingsDialog());
+        }
     }
 
     private void applyTheme() {

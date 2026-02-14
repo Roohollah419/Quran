@@ -140,31 +140,6 @@
         app:layout_constraintStart_toEndOf="@id/btnFontLarge"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Buttons -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCancel"
-        style="@style/AppButton.Outlined"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:layout_marginTop="@dimen/padding_large"
-        android:layout_marginEnd="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/btnFontSmall"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnApply"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnApply"
-        style="@style/AppButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/apply"
-        android:layout_marginTop="@dimen/padding_large"
-        android:layout_marginStart="@dimen/padding_small"
-        app:layout_constraintTop_toBottomOf="@id/btnFontSmall"
-        app:layout_constraintStart_toEndOf="@id/btnCancel"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <!-- Version -->
     <TextView
         android:id="@+id/tvVersion"

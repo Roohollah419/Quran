@@ -1,6 +1,7 @@
 package com.example.quran.ui.settings;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,11 +13,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.quran.R;
 import com.example.quran.utils.SettingsManager;
-import com.google.android.material.button.MaterialButton;
 
 /**
  * Dialog fragment for app settings (theme and font size).
@@ -28,10 +29,8 @@ public class SettingsDialogFragment extends DialogFragment {
     private Button btnLanguageEnglish, btnLanguageArabic;
     private Button btnFontSmall, btnFontMedium, btnFontLarge, btnFontXLarge;
     private TextView tvVersion;
-    private MaterialButton btnApply, btnCancel;
 
     private OnSettingsChangedListener listener;
-    private int selectedFontSize = 1; // Default Medium
 
     public interface OnSettingsChangedListener {
         void onSettingsChanged();
@@ -70,8 +69,6 @@ public class SettingsDialogFragment extends DialogFragment {
         btnFontLarge = view.findViewById(R.id.btnFontLarge);
         btnFontXLarge = view.findViewById(R.id.btnFontXLarge);
         tvVersion = view.findViewById(R.id.tvVersion);
-        btnApply = view.findViewById(R.id.btnApply);
-        btnCancel = view.findViewById(R.id.btnCancel);
 
         // Set version
         setVersionText();
@@ -111,48 +108,80 @@ public class SettingsDialogFragment extends DialogFragment {
         }
 
         // Load font size
-        selectedFontSize = settingsManager.getFontSize();
-        selectFontSizeButton(selectedFontSize);
+        selectFontSizeButton(settingsManager.getFontSize());
     }
 
     private void setupListeners() {
-        // Theme button listeners
-        btnThemeLight.setOnClickListener(v -> selectThemeButton(btnThemeLight));
-        btnThemeDark.setOnClickListener(v -> selectThemeButton(btnThemeDark));
+        // Theme button listeners - apply immediately
+        btnThemeLight.setOnClickListener(v -> {
+            selectThemeButton(btnThemeLight);
+            settingsManager.setTheme(SettingsManager.THEME_LIGHT);
+            applyThemeChange(false);
+        });
+        btnThemeDark.setOnClickListener(v -> {
+            selectThemeButton(btnThemeDark);
+            settingsManager.setTheme(SettingsManager.THEME_DARK);
+            applyThemeChange(true);
+        });
 
-        // Language button listeners
-        btnLanguageEnglish.setOnClickListener(v -> selectLanguageButton(btnLanguageEnglish));
-        btnLanguageArabic.setOnClickListener(v -> selectLanguageButton(btnLanguageArabic));
+        // Language button listeners - apply immediately
+        btnLanguageEnglish.setOnClickListener(v -> {
+            selectLanguageButton(btnLanguageEnglish);
+            applyLanguageChange(SettingsManager.LANGUAGE_ENGLISH);
+        });
+        btnLanguageArabic.setOnClickListener(v -> {
+            selectLanguageButton(btnLanguageArabic);
+            applyLanguageChange(SettingsManager.LANGUAGE_ARABIC);
+        });
 
-        // Font size button listeners
+        // Font size button listeners - apply immediately
         btnFontSmall.setOnClickListener(v -> {
-            selectedFontSize = 0;
             selectFontSizeButton(0);
+            applyFontSizeChange(0);
         });
         btnFontMedium.setOnClickListener(v -> {
-            selectedFontSize = 1;
             selectFontSizeButton(1);
+            applyFontSizeChange(1);
         });
         btnFontLarge.setOnClickListener(v -> {
-            selectedFontSize = 2;
             selectFontSizeButton(2);
+            applyFontSizeChange(2);
         });
         btnFontXLarge.setOnClickListener(v -> {
-            selectedFontSize = 3;
             selectFontSizeButton(3);
+            applyFontSizeChange(3);
         });
+    }
 
-        // Apply button
-        btnApply.setOnClickListener(v -> {
-            saveSettings();
-            if (listener != null) {
-                listener.onSettingsChanged();
-            }
-            dismiss();
-        });
+    private void applyThemeChange(boolean isDarkTheme) {
+        // Save theme immediately
+        String theme = isDarkTheme ? SettingsManager.THEME_DARK : SettingsManager.THEME_LIGHT;
+        settingsManager.setTheme(theme);
 
-        // Cancel button
-        btnCancel.setOnClickListener(v -> dismiss());
+        // Apply and recreate immediately
+        if (listener != null) {
+            listener.onSettingsChanged();
+        }
+    }
+
+    private void applyLanguageChange(String language) {
+        // Save language immediately
+        settingsManager.setLanguage(language);
+
+        // Apply and recreate immediately
+        if (listener != null) {
+            listener.onSettingsChanged();
+        }
+    }
+
+    private void applyFontSizeChange(int fontSize) {
+        // Save font size immediately
+        settingsManager.setFontSize(fontSize);
+
+        // Apply and recreate immediately
+        if (listener != null) {
+            listener.onSettingsChanged();
+        }
     }
 
     private void selectThemeButton(Button selectedButton) {
@@ -181,18 +210,5 @@ public class SettingsDialogFragment extends DialogFragment {
         } catch (PackageManager.NameNotFoundException e) {
             tvVersion.setText(getString(R.string.version_format, "1.0"));
         }
-    }
-
-    private void saveSettings() {
-        // Save theme
-        String theme = btnThemeDark.isSelected() ? SettingsManager.THEME_DARK : SettingsManager.THEME_LIGHT;
-        settingsManager.setTheme(theme);
-
-        // Save language
-        String language = btnLanguageArabic.isSelected() ? SettingsManager.LANGUAGE_ARABIC : SettingsManager.LANGUAGE_ENGLISH;
-        settingsManager.setLanguage(language);
-
-        // Save font size
-        settingsManager.setFontSize(selectedFontSize);
     }
 }
