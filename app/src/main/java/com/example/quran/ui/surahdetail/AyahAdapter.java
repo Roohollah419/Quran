@@ -65,12 +65,14 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         private TextView tvAyahNumber;
         private TextView tvAyahArabic;
         private TextView tvAyahTranslation;
+        private TextView tvBismillah;
 
         public AyahViewHolder(@NonNull View itemView) {
             super(itemView);
             tvAyahNumber = itemView.findViewById(R.id.tvAyahNumber);
             tvAyahArabic = itemView.findViewById(R.id.tvAyahArabic);
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
+            tvBismillah = itemView.findViewById(R.id.tvBismillah);
         }
 
         public void bind(Ayah ayah) {
@@ -79,6 +81,13 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahNumber.setText(ayahNumber);
             tvAyahArabic.setText(ayah.getTextArabic());
             tvAyahTranslation.setText(ayah.getTextTranslation());
+
+            // Show Bismillah for first ayah of all surahs except Surah 1 and 9
+            if (ayah.getAyahNumber() == 1 && ayah.getSurahNumber() != 1 && ayah.getSurahNumber() != 9) {
+                tvBismillah.setVisibility(View.VISIBLE);
+            } else {
+                tvBismillah.setVisibility(View.GONE);
+            }
 
             // Set ayah number background based on theme
             Drawable drawable;
@@ -93,10 +102,12 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahNumber.setTextSize(14 * fontSizeMultiplier);
             tvAyahArabic.setTextSize(20 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
+            tvBismillah.setTextSize(24 * fontSizeMultiplier);
 
             // Apply Uthman Taha Naskh font to Arabic text
             if (arabicTypeface != null) {
                 tvAyahArabic.setTypeface(arabicTypeface);
+                tvBismillah.setTypeface(arabicTypeface);
             }
         }
 
