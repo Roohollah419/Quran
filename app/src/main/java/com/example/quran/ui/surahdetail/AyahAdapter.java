@@ -62,14 +62,12 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
     }
 
     class AyahViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvAyahNumber;
         private TextView tvAyahArabic;
         private TextView tvAyahTranslation;
         private TextView tvBismillah;
 
         public AyahViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvAyahNumber = itemView.findViewById(R.id.tvAyahNumber);
             tvAyahArabic = itemView.findViewById(R.id.tvAyahArabic);
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
             tvBismillah = itemView.findViewById(R.id.tvBismillah);
@@ -78,8 +76,10 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         public void bind(Ayah ayah) {
             // Convert ayah number to Arabic numerals
             String ayahNumber = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
-            tvAyahNumber.setText(ayahNumber);
-            tvAyahArabic.setText(ayah.getTextArabic());
+
+            // Concatenate ayah text with number in parentheses
+            String ayahTextWithNumber = ayah.getTextArabic() + " (" + ayahNumber + ")";
+            tvAyahArabic.setText(ayahTextWithNumber);
             tvAyahTranslation.setText(ayah.getTextTranslation());
 
             // Show Bismillah for first ayah of all surahs except Surah 1 and 9
@@ -89,17 +89,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
                 tvBismillah.setVisibility(View.GONE);
             }
 
-            // Set ayah number background based on theme
-            Drawable drawable;
-            if (settingsManager.isDarkTheme()) {
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.ayah_number_dark, null);
-            } else {
-                drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.ayah_number_light, null);
-            }
-            tvAyahNumber.setBackground(drawable);
-
             // Apply font size
-            tvAyahNumber.setTextSize(14 * fontSizeMultiplier);
             tvAyahArabic.setTextSize(20 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
             tvBismillah.setTextSize(24 * fontSizeMultiplier);
