@@ -48,15 +48,9 @@ public class MainActivity extends BaseActivity {
 
             // Listen for navigation changes to update settings icon color
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                if (destination.getId() == R.id.surahListFragment) {
-                    // White icon for Surah list page (green header background)
-                    btnSettings.setImageTintList(ColorStateList.valueOf(
-                            ContextCompat.getColor(this, android.R.color.white)));
-                } else {
-                    // Default primary color for other pages
-                    btnSettings.setImageTintList(ColorStateList.valueOf(
-                            ContextCompat.getColor(this, R.color.primary)));
-                }
+                // Always use primary color since toolbar has background color now
+                btnSettings.setImageTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(this, R.color.primary)));
             });
         }
     }
@@ -74,12 +68,22 @@ public class MainActivity extends BaseActivity {
             return; // Dialog already showing, don't create another
         }
 
-        SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(() -> {
-            // Mark that settings dialog should reopen after recreation
-            getIntent().putExtra("REOPEN_SETTINGS", true);
-            // Recreate activity to apply changes immediately
-            recreate();
-        });
+        // Hide settings button when dialog is shown
+        btnSettings.setVisibility(android.view.View.GONE);
+
+        SettingsDialogFragment dialog = SettingsDialogFragment.newInstance(
+            () -> {
+                // Mark that settings dialog should reopen after recreation
+                getIntent().putExtra("REOPEN_SETTINGS", true);
+                // Recreate activity to apply changes immediately
+                recreate();
+            },
+            () -> {
+                // Show settings button again when dialog is dismissed
+                btnSettings.setVisibility(android.view.View.VISIBLE);
+            }
+        );
+
         dialog.show(getSupportFragmentManager(), "SettingsDialog");
     }
 

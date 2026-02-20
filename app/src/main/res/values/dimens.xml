@@ -22,4 +22,7 @@
     <dimen name="button_padding_vertical">12dp</dimen>
     <dimen name="button_padding_horizontal">16dp</dimen>
     <dimen name="button_margin_horizontal">32dp</dimen>
+
+    <!-- Toolbar -->
+    <dimen name="toolbar_height">40dp</dimen>
 </resources>
