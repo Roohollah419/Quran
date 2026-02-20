@@ -38,6 +38,7 @@ public class SurahDetailFragment extends BaseFragment {
     private ImageView ivRevelationType;
     private RecyclerView recyclerView;
     private AyahAdapter adapter;
+    private Typeface arabicTypeface;
 
     private int surahNumber;
 
@@ -56,6 +57,9 @@ public class SurahDetailFragment extends BaseFragment {
 
         // Setup SettingsManager
         settingsManager = new SettingsManager(requireContext());
+
+        // Load Arabic font
+        arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
@@ -87,7 +91,6 @@ public class SurahDetailFragment extends BaseFragment {
                 // Set surah name based on language
                 if (isArabic) {
                     tvSurahName.setText(surah.getNameArabic());
-                    Typeface arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
                     if (arabicTypeface != null) {
                         tvSurahName.setTypeface(arabicTypeface);
                     }

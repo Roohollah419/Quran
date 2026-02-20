@@ -107,6 +107,9 @@ public class SettingsDialogFragment extends DialogFragment {
 
             // Add slide up animation
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            // Remove elevation/shadow
+            dialog.getWindow().setElevation(0);
         }
     }
 
