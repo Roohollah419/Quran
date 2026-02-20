@@ -10,10 +10,18 @@
         android:label="Home">
         <action
             android:id="@+id/action_homeFragment_to_surahListFragment"
-            app:destination="@id/surahListFragment" />
+            app:destination="@id/surahListFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_homeFragment_to_surahDetailFragment"
-            app:destination="@id/surahDetailFragment" />
+            app:destination="@id/surahDetailFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
 
     <fragment
@@ -22,7 +30,11 @@
         android:label="Surahs">
         <action
             android:id="@+id/action_surahListFragment_to_surahDetailFragment"
-            app:destination="@id/surahDetailFragment" />
+            app:destination="@id/surahDetailFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
 
     <fragment

@@ -75,8 +75,8 @@ public class SurahAdapterTest {
 
     @Test
     public void testDifferentFontSizes() {
-        SurahAdapter smallAdapter = new SurahAdapter(mockListener, 0.8f, context);
-        SurahAdapter largeAdapter = new SurahAdapter(mockListener, 1.4f, context);
+        SurahAdapter smallAdapter = new SurahAdapter(mockListener,0.8f, context);
+        SurahAdapter largeAdapter = new SurahAdapter(mockListener,1.4f, context);
 
         assertNotNull(smallAdapter);
         assertNotNull(largeAdapter);

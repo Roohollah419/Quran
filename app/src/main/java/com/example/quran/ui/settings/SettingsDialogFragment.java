@@ -104,6 +104,9 @@ public class SettingsDialogFragment extends DialogFragment {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             );
+
+            // Add slide up animation
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         }
     }
 

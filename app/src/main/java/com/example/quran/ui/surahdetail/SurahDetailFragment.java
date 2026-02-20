@@ -129,8 +129,9 @@ public class SurahDetailFragment extends BaseFragment {
 
     private void applyFontSize() {
         float multiplier = settingsManager.getFontSizeMultiplier();
-        tvSurahName.setTextSize(24 * multiplier);
-        tvSurahInfo.setTextSize(20 * multiplier);
+        tvSurahName.setTextSize(18 * multiplier);
+        tvSurahNumber.setTextSize(16 * multiplier);
+        tvSurahInfo.setTextSize(16 * multiplier);
     }
 
     private String convertToArabicNumerals(String number) {
