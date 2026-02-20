@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tilawah+</string>
-    <string name="welcome_message">Hello and welcome!</string>
 
     <!-- Home Screen -->
-    <string name="welcome_home">Welcome to the Holy Quran</string>
-    <string name="total_surahs">Total Surahs: %d</string>
-    <string name="view_surahs">View Surahs</string>
     <string name="skip">Skip</string>
     <string name="feeling_lucky">I\'m Feeling Lucky</string>
 
@@ -30,14 +26,8 @@
     <string name="font_size_medium">M</string>
     <string name="font_size_large">L</string>
     <string name="font_size_extra_large">XL</string>
-    <string name="apply">Apply</string>
-    <string name="cancel">Cancel</string>
     <string name="version">Version</string>
     <string name="version_format">Version %s</string>
-
-    <!-- General -->
-    <string name="loading">Loading…</string>
-    <string name="error">Error occurred</string>
 
     <!-- Surah List Headers -->
     <string name="header_surah_name">Surah</string>
