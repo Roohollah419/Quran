@@ -41,13 +41,20 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
         void onBookmarkRemoved();
     }
 
-    public BookmarkedAyahAdapter(float fontSizeMultiplier, Context context, OnBookmarkRemovedListener listener) {
+    public interface OnAyahClickListener {
+        void onAyahClick(int surahNumber, int ayahNumber);
+    }
+
+    private OnAyahClickListener ayahClickListener;
+
+    public BookmarkedAyahAdapter(float fontSizeMultiplier, Context context, OnBookmarkRemovedListener listener, OnAyahClickListener clickListener) {
         this.fontSizeMultiplier = fontSizeMultiplier;
         this.context = context;
         this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
         this.settingsManager = new SettingsManager(context);
         this.bookmarkManager = new BookmarkManager(context);
         this.bookmarkRemovedListener = listener;
+        this.ayahClickListener = clickListener;
     }
 
     @NonNull
@@ -100,6 +107,13 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
         }
 
         public void bind(Ayah ayah) {
+            // Set click listener for the entire item
+            itemView.setOnClickListener(v -> {
+                if (ayahClickListener != null) {
+                    ayahClickListener.onAyahClick(ayah.getSurahNumber(), ayah.getAyahNumber());
+                }
+            });
+
             // Convert ayah number to Arabic numerals
             String ayahNumber = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
 

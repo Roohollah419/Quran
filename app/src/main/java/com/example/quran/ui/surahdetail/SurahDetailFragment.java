@@ -41,6 +41,7 @@ public class SurahDetailFragment extends BaseFragment {
     private Typeface arabicTypeface;
 
     private int surahNumber;
+    private int scrollToAyah = -1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class SurahDetailFragment extends BaseFragment {
         // Get arguments
         if (getArguments() != null) {
             surahNumber = getArguments().getInt(Constants.KEY_SURAH_NUMBER, 1);
+            scrollToAyah = getArguments().getInt("scroll_to_ayah", -1);
         }
 
         // Setup ViewModel
@@ -126,6 +128,25 @@ public class SurahDetailFragment extends BaseFragment {
         viewModel.getAyahs().observe(getViewLifecycleOwner(), ayahs -> {
             if (ayahs != null) {
                 adapter.setAyahs(ayahs);
+
+                // Scroll to specific Ayah if requested
+                if (scrollToAyah > 0) {
+                    // Find the position of the Ayah in the list
+                    for (int i = 0; i < ayahs.size(); i++) {
+                        if (ayahs.get(i).getAyahNumber() == scrollToAyah) {
+                            final int position = i;
+                            // Post to ensure RecyclerView is laid out
+                            recyclerView.post(() -> {
+                                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                                if (layoutManager != null) {
+                                    layoutManager.scrollToPositionWithOffset(position, 0);
+                                }
+                            });
+                            scrollToAyah = -1; // Reset so it doesn't scroll again
+                            break;
+                        }
+                    }
+                }
             }
         });
     }

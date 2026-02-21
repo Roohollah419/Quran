@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
+import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.ViewModelFactory;
 
@@ -46,6 +48,13 @@ public class BookmarksFragment extends BaseFragment {
             () -> {
                 // Reload bookmarks when one is removed
                 viewModel.loadBookmarks();
+            },
+            (surahNumber, ayahNumber) -> {
+                // Navigate to Surah detail with scroll position
+                Bundle args = new Bundle();
+                args.putInt(Constants.KEY_SURAH_NUMBER, surahNumber);
+                args.putInt("scroll_to_ayah", ayahNumber);
+                Navigation.findNavController(requireView()).navigate(R.id.action_bookmarksFragment_to_surahDetailFragment, args);
             });
         recyclerView.setAdapter(adapter);
 

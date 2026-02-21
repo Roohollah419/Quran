@@ -67,6 +67,14 @@
     <fragment
         android:id="@+id/bookmarksFragment"
         android:name="com.example.quran.ui.bookmarks.BookmarksFragment"
-        android:label="Bookmarks" />
+        android:label="Bookmarks">
+        <action
+            android:id="@+id/action_bookmarksFragment_to_surahDetailFragment"
+            app:destination="@id/surahDetailFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
 
 </navigation>
