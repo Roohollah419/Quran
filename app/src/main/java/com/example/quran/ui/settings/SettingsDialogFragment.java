@@ -34,16 +34,22 @@ public class SettingsDialogFragment extends DialogFragment {
     private TextView tvVersion;
     private LinearLayout layoutGithub;
 
-    private OnSettingsChangedListener listener;
+    private OnSettingsChangedListener settingsChangedListener;
+    private OnDismissListener dismissListener;
     private static final String GITHUB_URL = "https://github.com/Roohollah419/Quran";
 
     public interface OnSettingsChangedListener {
         void onSettingsChanged();
     }
 
-    public static SettingsDialogFragment newInstance(OnSettingsChangedListener listener) {
+    public interface OnDismissListener {
+        void onDialogDismissed();
+    }
+
+    public static SettingsDialogFragment newInstance(OnSettingsChangedListener settingsListener, OnDismissListener dismissListener) {
         SettingsDialogFragment fragment = new SettingsDialogFragment();
-        fragment.listener = listener;
+        fragment.settingsChangedListener = settingsListener;
+        fragment.dismissListener = dismissListener;
         return fragment;
     }
 
@@ -98,6 +104,20 @@ public class SettingsDialogFragment extends DialogFragment {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             );
+
+            // Add slide up animation
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            // Remove elevation/shadow
+            dialog.getWindow().setElevation(0);
+        }
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (dismissListener != null) {
+            dismissListener.onDialogDismissed();
         }
     }
 
@@ -168,8 +188,8 @@ public class SettingsDialogFragment extends DialogFragment {
         settingsManager.setTheme(theme);
 
         // Apply and recreate immediately
-        if (listener != null) {
-            listener.onSettingsChanged();
+        if (settingsChangedListener != null) {
+            settingsChangedListener.onSettingsChanged();
         }
     }
 
@@ -178,8 +198,8 @@ public class SettingsDialogFragment extends DialogFragment {
         settingsManager.setLanguage(language);
 
         // Apply and recreate immediately
-        if (listener != null) {
-            listener.onSettingsChanged();
+        if (settingsChangedListener != null) {
+            settingsChangedListener.onSettingsChanged();
         }
     }
 
@@ -188,8 +208,8 @@ public class SettingsDialogFragment extends DialogFragment {
         settingsManager.setFontSize(fontSize);
 
         // Apply and recreate immediately
-        if (listener != null) {
-            listener.onSettingsChanged();
+        if (settingsChangedListener != null) {
+            settingsChangedListener.onSettingsChanged();
         }
     }
 

@@ -20,6 +20,4 @@
     <!-- Additional Colors -->
     <color name="divider">#BDBDBD</color>
     <color name="error">#D32F2F</color>
-    <color name="orange">#FF6F00</color>
-    <color name="orange_light">#FFA726</color>
 </resources>

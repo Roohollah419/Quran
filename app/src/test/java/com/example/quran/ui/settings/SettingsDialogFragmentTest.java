@@ -19,30 +19,43 @@ public class SettingsDialogFragmentTest {
 
     private Context context;
     private SettingsManager settingsManager;
-    private boolean listenerCalled;
+    private boolean settingsChangedListenerCalled;
+    private boolean dismissListenerCalled;
 
     @Before
     public void setup() {
         context = RuntimeEnvironment.getApplication();
         settingsManager = new SettingsManager(context);
-        listenerCalled = false;
+        settingsChangedListenerCalled = false;
+        dismissListenerCalled = false;
     }
 
     @Test
     public void testFragmentCreation() {
         SettingsDialogFragment fragment = SettingsDialogFragment.newInstance(() -> {
-            listenerCalled = true;
+            settingsChangedListenerCalled = true;
+        }, () -> {
+            dismissListenerCalled = true;
         });
         assertNotNull(fragment);
     }
 
     @Test
-    public void testListenerCallback() {
+    public void testSettingsChangedListenerCallback() {
         SettingsDialogFragment.OnSettingsChangedListener listener = () -> {
-            listenerCalled = true;
+            settingsChangedListenerCalled = true;
         };
         listener.onSettingsChanged();
-        assertTrue(listenerCalled);
+        assertTrue(settingsChangedListenerCalled);
+    }
+
+    @Test
+    public void testDismissListenerCallback() {
+        SettingsDialogFragment.OnDismissListener listener = () -> {
+            dismissListenerCalled = true;
+        };
+        listener.onDialogDismissed();
+        assertTrue(dismissListenerCalled);
     }
 
     @Test

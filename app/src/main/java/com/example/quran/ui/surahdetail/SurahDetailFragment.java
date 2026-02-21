@@ -33,10 +33,12 @@ public class SurahDetailFragment extends BaseFragment {
     private SurahDetailViewModel viewModel;
     private SettingsManager settingsManager;
     private TextView tvSurahName;
+    private TextView tvSurahNumber;
     private TextView tvSurahInfo;
     private ImageView ivRevelationType;
     private RecyclerView recyclerView;
     private AyahAdapter adapter;
+    private Typeface arabicTypeface;
 
     private int surahNumber;
 
@@ -48,12 +50,16 @@ public class SurahDetailFragment extends BaseFragment {
     @Override
     protected void setupUI(View view) {
         tvSurahName = view.findViewById(R.id.tvSurahName);
+        tvSurahNumber = view.findViewById(R.id.tvSurahNumber);
         tvSurahInfo = view.findViewById(R.id.tvSurahInfo);
         ivRevelationType = view.findViewById(R.id.ivRevelationType);
         recyclerView = view.findViewById(R.id.recyclerViewAyahs);
 
         // Setup SettingsManager
         settingsManager = new SettingsManager(requireContext());
+
+        // Load Arabic font
+        arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
@@ -85,16 +91,17 @@ public class SurahDetailFragment extends BaseFragment {
                 // Set surah name based on language
                 if (isArabic) {
                     tvSurahName.setText(surah.getNameArabic());
-                    Typeface arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
                     if (arabicTypeface != null) {
                         tvSurahName.setTypeface(arabicTypeface);
                     }
-                    // Show ayah count in Arabic numerals
+                    // Show surah number and ayah count in Arabic numerals
+                    tvSurahNumber.setText(convertToArabicNumerals(String.valueOf(surah.getNumber())));
                     tvSurahInfo.setText(convertToArabicNumerals(String.valueOf(surah.getTotalAyahs())));
                 } else {
                     tvSurahName.setText(surah.getNameEnglish());
                     tvSurahName.setTypeface(Typeface.DEFAULT_BOLD);
-                    // Show ayah count in English numerals
+                    // Show surah number and ayah count in English numerals
+                    tvSurahNumber.setText(String.valueOf(surah.getNumber()));
                     tvSurahInfo.setText(String.valueOf(surah.getTotalAyahs()));
                 }
 
@@ -125,8 +132,9 @@ public class SurahDetailFragment extends BaseFragment {
 
     private void applyFontSize() {
         float multiplier = settingsManager.getFontSizeMultiplier();
-        tvSurahName.setTextSize(24 * multiplier);
-        tvSurahInfo.setTextSize(20 * multiplier);
+        tvSurahName.setTextSize(18 * multiplier);
+        tvSurahNumber.setTextSize(16 * multiplier);
+        tvSurahInfo.setTextSize(16 * multiplier);
     }
 
     private String convertToArabicNumerals(String number) {

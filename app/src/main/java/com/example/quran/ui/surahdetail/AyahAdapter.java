@@ -90,7 +90,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             }
 
             // Apply font size
-            tvAyahArabic.setTextSize(20 * fontSizeMultiplier);
+            tvAyahArabic.setTextSize(24 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
             tvBismillah.setTextSize(24 * fontSizeMultiplier);
 
