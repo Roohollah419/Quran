@@ -23,6 +23,8 @@
         android:id="@+id/recyclerViewBookmarks"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingBottom="56dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/tvBookmarksTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

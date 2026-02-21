@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quran.R;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
-import com.example.quran.ui.surahdetail.AyahAdapter;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.ViewModelFactory;
 
@@ -27,7 +26,7 @@ public class BookmarksFragment extends BaseFragment {
     private SettingsManager settingsManager;
     private RecyclerView recyclerView;
     private TextView tvEmptyBookmarks;
-    private AyahAdapter adapter;
+    private BookmarkedAyahAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +42,11 @@ public class BookmarksFragment extends BaseFragment {
         settingsManager = new SettingsManager(requireContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
+        adapter = new BookmarkedAyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext(),
+            () -> {
+                // Reload bookmarks when one is removed
+                viewModel.loadBookmarks();
+            });
         recyclerView.setAdapter(adapter);
 
         // Setup ViewModel
@@ -67,6 +70,18 @@ public class BookmarksFragment extends BaseFragment {
                     tvEmptyBookmarks.setVisibility(View.GONE);
                     adapter.setAyahs(ayahs);
                 }
+            }
+        });
+
+        viewModel.getSurahNamesEnglish().observe(getViewLifecycleOwner(), surahNames -> {
+            if (surahNames != null) {
+                adapter.setSurahNamesEnglish(surahNames);
+            }
+        });
+
+        viewModel.getSurahNamesArabic().observe(getViewLifecycleOwner(), surahNames -> {
+            if (surahNames != null) {
+                adapter.setSurahNamesArabic(surahNames);
             }
         });
     }
