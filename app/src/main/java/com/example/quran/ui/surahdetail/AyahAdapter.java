@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
+import com.example.quran.utils.BookmarkManager;
 import com.example.quran.utils.SettingsManager;
 
 import java.util.ArrayList;
@@ -30,12 +32,14 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
     private Typeface arabicTypeface;
     private Context context;
     private SettingsManager settingsManager;
+    private BookmarkManager bookmarkManager;
 
     public AyahAdapter(float fontSizeMultiplier, Context context) {
         this.fontSizeMultiplier = fontSizeMultiplier;
         this.context = context;
         this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
         this.settingsManager = new SettingsManager(context);
+        this.bookmarkManager = new BookmarkManager(context);
     }
 
     @NonNull
@@ -65,12 +69,14 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         private TextView tvAyahArabic;
         private TextView tvAyahTranslation;
         private TextView tvBismillah;
+        private ImageView ivBookmark;
 
         public AyahViewHolder(@NonNull View itemView) {
             super(itemView);
             tvAyahArabic = itemView.findViewById(R.id.tvAyahArabic);
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
             tvBismillah = itemView.findViewById(R.id.tvBismillah);
+            ivBookmark = itemView.findViewById(R.id.ivBookmark);
         }
 
         public void bind(Ayah ayah) {
@@ -98,6 +104,24 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             if (arabicTypeface != null) {
                 tvAyahArabic.setTypeface(arabicTypeface);
                 tvBismillah.setTypeface(arabicTypeface);
+            }
+
+            // Set bookmark icon based on current state
+            updateBookmarkIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
+
+            // Handle bookmark click
+            ivBookmark.setOnClickListener(v -> {
+                boolean isBookmarked = bookmarkManager.toggleBookmark(ayah.getSurahNumber(), ayah.getAyahNumber());
+                updateBookmarkIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
+            });
+        }
+
+        private void updateBookmarkIcon(int surahNumber, int ayahNumber) {
+            boolean isBookmarked = bookmarkManager.isBookmarked(surahNumber, ayahNumber);
+            if (isBookmarked) {
+                ivBookmark.setImageResource(R.drawable.ic_bookmark_filled);
+            } else {
+                ivBookmark.setImageResource(R.drawable.ic_bookmark_outline);
             }
         }
 

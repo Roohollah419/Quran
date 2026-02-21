@@ -157,4 +157,11 @@ public class QuranRepository {
                 entity.getTextTranslation()
         );
     }
+
+    /**
+     * Get the application context.
+     */
+    public Context getContext() {
+        return context;
+    }
 }
