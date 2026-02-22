@@ -93,6 +93,7 @@ public class SurahDetailFragment extends BaseFragment {
                 // Set surah name based on language
                 if (isArabic) {
                     tvSurahName.setText(surah.getNameArabic());
+                    adapter.setSurahName(surah.getNameArabic());
                     if (arabicTypeface != null) {
                         tvSurahName.setTypeface(arabicTypeface);
                     }
@@ -101,6 +102,7 @@ public class SurahDetailFragment extends BaseFragment {
                     tvSurahInfo.setText(convertToArabicNumerals(String.valueOf(surah.getTotalAyahs())));
                 } else {
                     tvSurahName.setText(surah.getNameEnglish());
+                    adapter.setSurahName(surah.getNameEnglish());
                     tvSurahName.setTypeface(Typeface.DEFAULT_BOLD);
                     // Show surah number and ayah count in English numerals
                     tvSurahNumber.setText(String.valueOf(surah.getNumber()));

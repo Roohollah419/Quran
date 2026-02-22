@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-22
+
+### Added
+- Bookmarks feature for saving favorite ayahs for quick access
+- Bookmark icon (24dp outlined/filled) in ayah items that toggles between outline and filled state
+- Bookmarks toolbar button (40dp filled icon) for quick access to all bookmarked ayahs
+- Bookmarks list view showing all bookmarked ayahs with Arabic text, translation, and address
+- Navigation from bookmarks list to specific ayah in surah detail view with automatic scrolling
+- BookmarkManager utility class for managing bookmark storage using SharedPreferences
+- Comments feature for adding personal notes to any ayah
+- Comment icon (24dp outlined/filled) in ayah items that toggles between outline and filled state based on whether a comment exists
+- Comment dialog for entering and editing comment text with Save and Delete buttons (max 500 characters)
+- Comments toolbar button (40dp filled icon) positioned between bookmarks and settings for quick access to all comments
+- Comments list view showing all commented ayahs with Arabic text, translation, address, and comment text
+- Navigation from comments list to specific ayah in surah detail view with automatic scrolling
+- Edit and delete functionality for comments directly from the comments list
+- CommentManager utility class for managing comment storage using SharedPreferences with JSON serialization
+- Theme-aware comment text display with subtle background and border styling
+- Full test coverage for CommentManager and CommentsViewModel (80%+ line coverage maintained)
+
+### Changed
+- Updated ayah item layout to include bookmark and comment icons
+- Extended AyahAdapter to handle bookmark and comment icon clicks and state updates
+- Updated toolbar layout in activity_main.xml to include bookmarks and comments buttons
+- Extended navigation graph with bookmarksFragment and commentsFragment destinations and navigation actions
+- Updated ViewModelFactory to register BookmarksViewModel and CommentsViewModel for dependency injection
+
+### Fixed
+- Bookmark icon state synchronization in bookmark list view
+- Navigation from bookmarked ayah to correct position in surah detail view
+
 ## [1.1] - 2026-02-21
 
 ### Added

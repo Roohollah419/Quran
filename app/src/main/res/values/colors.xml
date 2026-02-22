@@ -20,4 +20,8 @@
     <!-- Additional Colors -->
     <color name="divider">#BDBDBD</color>
     <color name="error">#D32F2F</color>
+
+    <!-- Comment Colors -->
+    <color name="comment_background">#F5F5F5</color>
+    <color name="comment_border">#E0E0E0</color>
 </resources>

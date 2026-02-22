@@ -40,4 +40,16 @@
     <string name="header_revelation_type_ar">نوع</string>
     <string name="meccan_ar">مكية</string>
     <string name="medinan_ar">مدنية</string>
+
+    <!-- Comments -->
+    <string name="add_comment">Add Comment</string>
+    <string name="edit_comment">Edit Comment</string>
+    <string name="enter_your_comment">Enter your comment...</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="close">Close</string>
+    <string name="comments">Comments</string>
+    <string name="no_comments">No comments yet.\nTap the comment icon on any Ayah to add one.</string>
+    <string name="comment_deleted">Comment deleted</string>
+    <string name="comment_saved">Comment saved</string>
 </resources>

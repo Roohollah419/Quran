@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.bookmarks.BookmarksViewModel;
+import com.example.quran.ui.comments.CommentsViewModel;
 import com.example.quran.ui.home.HomeViewModel;
 import com.example.quran.ui.surahdetail.SurahDetailViewModel;
 import com.example.quran.ui.surahlist.SurahListViewModel;
@@ -29,6 +30,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new SurahDetailViewModel(repository);
         } else if (modelClass.isAssignableFrom(BookmarksViewModel.class)) {
             return (T) new BookmarksViewModel(repository);
+        } else if (modelClass.isAssignableFrom(CommentsViewModel.class)) {
+            return (T) new CommentsViewModel(repository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

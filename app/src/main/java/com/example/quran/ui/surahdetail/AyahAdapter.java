@@ -16,8 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
+import com.example.quran.ui.comments.CommentDialogFragment;
 import com.example.quran.utils.BookmarkManager;
+import com.example.quran.utils.CommentManager;
 import com.example.quran.utils.SettingsManager;
+
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,8 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
     private Context context;
     private SettingsManager settingsManager;
     private BookmarkManager bookmarkManager;
+    private CommentManager commentManager;
+    private String surahName = "";
 
     public AyahAdapter(float fontSizeMultiplier, Context context) {
         this.fontSizeMultiplier = fontSizeMultiplier;
@@ -40,6 +46,11 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         this.arabicTypeface = ResourcesCompat.getFont(context, R.font.uthmantaha);
         this.settingsManager = new SettingsManager(context);
         this.bookmarkManager = new BookmarkManager(context);
+        this.commentManager = new CommentManager(context);
+    }
+
+    public void setSurahName(String surahName) {
+        this.surahName = surahName;
     }
 
     @NonNull
@@ -69,6 +80,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         private TextView tvAyahArabic;
         private TextView tvAyahTranslation;
         private TextView tvBismillah;
+        private ImageView ivComment;
         private ImageView ivBookmark;
 
         public AyahViewHolder(@NonNull View itemView) {
@@ -76,6 +88,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahArabic = itemView.findViewById(R.id.tvAyahArabic);
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
             tvBismillah = itemView.findViewById(R.id.tvBismillah);
+            ivComment = itemView.findViewById(R.id.ivComment);
             ivBookmark = itemView.findViewById(R.id.ivBookmark);
         }
 
@@ -106,6 +119,29 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
                 tvBismillah.setTypeface(arabicTypeface);
             }
 
+            // Set comment icon based on current state
+            updateCommentIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
+
+            // Handle comment click
+            ivComment.setOnClickListener(v -> {
+                if (context instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) context;
+                    String existingComment = commentManager.getComment(ayah.getSurahNumber(), ayah.getAyahNumber());
+                    CommentDialogFragment dialog = CommentDialogFragment.newInstance(
+                            ayah.getSurahNumber(),
+                            ayah.getAyahNumber(),
+                            surahName,
+                            existingComment,
+                            (surahNum, ayahNum, commentText) -> {
+                                // Update icon after comment is saved or deleted
+                                updateCommentIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
+                            },
+                            () -> {}
+                    );
+                    dialog.show(activity.getSupportFragmentManager(), "CommentDialog");
+                }
+            });
+
             // Set bookmark icon based on current state
             updateBookmarkIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
 
@@ -114,6 +150,15 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
                 boolean isBookmarked = bookmarkManager.toggleBookmark(ayah.getSurahNumber(), ayah.getAyahNumber());
                 updateBookmarkIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
             });
+        }
+
+        private void updateCommentIcon(int surahNumber, int ayahNumber) {
+            boolean hasComment = commentManager.hasComment(surahNumber, ayahNumber);
+            if (hasComment) {
+                ivComment.setImageResource(R.drawable.ic_comment_filled);
+            } else {
+                ivComment.setImageResource(R.drawable.ic_comment_outline);
+            }
         }
 
         private void updateBookmarkIcon(int surahNumber, int ayahNumber) {

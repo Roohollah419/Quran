@@ -22,6 +22,7 @@ public class MainActivity extends BaseActivity {
     private NavController navController;
     private ImageButton btnSettings;
     private ImageButton btnBookmarks;
+    private ImageButton btnComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,12 @@ public class MainActivity extends BaseActivity {
         btnBookmarks = findViewById(R.id.btnBookmarks);
         btnBookmarks.setOnClickListener(v -> {
             navigateToBookmarks();
+        });
+
+        // Setup Comments button
+        btnComments = findViewById(R.id.btnComments);
+        btnComments.setOnClickListener(v -> {
+            navigateToComments();
         });
 
         // Setup Settings button
@@ -60,6 +67,8 @@ public class MainActivity extends BaseActivity {
                         ContextCompat.getColor(this, R.color.primary)));
                 btnBookmarks.setImageTintList(ColorStateList.valueOf(
                         ContextCompat.getColor(this, R.color.primary)));
+                btnComments.setImageTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(this, R.color.primary)));
             });
         }
     }
@@ -78,6 +87,19 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.action_surahListFragment_to_bookmarksFragment);
             } else if (currentDestination == R.id.surahDetailFragment) {
                 navController.navigate(R.id.action_surahDetailFragment_to_bookmarksFragment);
+            }
+        }
+    }
+
+    private void navigateToComments() {
+        if (navController != null) {
+            int currentDestination = navController.getCurrentDestination().getId();
+            if (currentDestination == R.id.homeFragment) {
+                navController.navigate(R.id.action_homeFragment_to_commentsFragment);
+            } else if (currentDestination == R.id.surahListFragment) {
+                navController.navigate(R.id.action_surahListFragment_to_commentsFragment);
+            } else if (currentDestination == R.id.surahDetailFragment) {
+                navController.navigate(R.id.action_surahDetailFragment_to_commentsFragment);
             }
         }
     }
