@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-22
+
+### Added
+- Share functionality for individual ayahs to share through SMS, Bluetooth, or other installed apps
+- Share icon (24dp filled) in ayah items positioned before comment and bookmark icons
+- Share text includes Arabic text, English translation, ayah address (Surah name and ayah number), app name (Tilawah+), and GitHub repository link
+- Android Intent chooser for selecting sharing method (SMS, Bluetooth, WhatsApp, email, etc.)
+
+### Changed
+- Updated ayah item layout to include share icon with proper constraint positioning
+- Extended AyahAdapter to handle share icon click events with formatted share text
+- Share icon uses primary color for filled appearance consistent with app theme
+- Share text format now promotes the app with "Shared from Tilawah+" and GitHub link (https://github.com/Roohollah419/Quran)
+
 ## [1.2.0] - 2026-02-22
 
 ### Added

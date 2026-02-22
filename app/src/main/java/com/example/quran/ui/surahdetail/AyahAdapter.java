@@ -1,6 +1,7 @@
 package com.example.quran.ui.surahdetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -80,6 +81,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         private TextView tvAyahArabic;
         private TextView tvAyahTranslation;
         private TextView tvBismillah;
+        private ImageView ivShare;
         private ImageView ivComment;
         private ImageView ivBookmark;
 
@@ -88,6 +90,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahArabic = itemView.findViewById(R.id.tvAyahArabic);
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
             tvBismillah = itemView.findViewById(R.id.tvBismillah);
+            ivShare = itemView.findViewById(R.id.ivShare);
             ivComment = itemView.findViewById(R.id.ivComment);
             ivBookmark = itemView.findViewById(R.id.ivBookmark);
         }
@@ -118,6 +121,25 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
                 tvAyahArabic.setTypeface(arabicTypeface);
                 tvBismillah.setTypeface(arabicTypeface);
             }
+
+            // Handle share click
+            ivShare.setOnClickListener(v -> {
+                // Format share text: Arabic + Translation + Ayah address + App info
+                String shareText = String.format(
+                        "%s\n\n%s\n\n%s (%d)\n\nShared from %s\n%s",
+                        ayah.getTextArabic(),
+                        ayah.getTextTranslation(),
+                        surahName,
+                        ayah.getAyahNumber(),
+                        context.getString(R.string.app_name),
+                        "https://github.com/Roohollah419/Quran"
+                );
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_ayah)));
+            });
 
             // Set comment icon based on current state
             updateCommentIcon(ayah.getSurahNumber(), ayah.getAyahNumber());

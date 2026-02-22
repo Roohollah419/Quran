@@ -52,4 +52,7 @@
     <string name="no_comments">No comments yet.\nTap the comment icon on any Ayah to add one.</string>
     <string name="comment_deleted">Comment deleted</string>
     <string name="comment_saved">Comment saved</string>
+
+    <!-- Share -->
+    <string name="share_ayah">Share Ayah</string>
 </resources>
