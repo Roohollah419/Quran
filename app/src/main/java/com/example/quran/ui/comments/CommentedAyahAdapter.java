@@ -141,11 +141,10 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
                 tvBismillah.setVisibility(View.GONE);
             }
 
-            // Set Ayah address
+            // Set Ayah address (only surah name, ayah number is shown in the ayah text)
             boolean isArabic = settingsManager.isArabicLanguage();
             final String surahName; // Plain text for dialog
             String surahNameDisplay; // Display text (font glyph for Arabic)
-            String ayahNumberDisplay;
 
             if (isArabic) {
                 // Plain text for dialog
@@ -156,7 +155,6 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
                 surahName = tempSurahName;
                 // Custom calligraphy font for display
                 surahNameDisplay = SurahFontHelper.getCharacter(ayah.getSurahNumber());
-                ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
                 tvAyahAddress.setTypeface(SurahFontHelper.getTypeface(context));
                 tvAyahAddress.setTextSize(14 * fontSizeMultiplier * 1.5f);
             } else {
@@ -166,13 +164,12 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
                 }
                 surahName = tempSurahName;
                 surahNameDisplay = tempSurahName;
-                ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
                 tvAyahAddress.setTypeface(Typeface.DEFAULT);
                 tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
             }
 
-            // Format: "Surah Name (Ayah Number)" or "اسم السورة (رقم الآية)"
-            tvAyahAddress.setText(String.format("%s (%s)", surahNameDisplay, ayahNumberDisplay));
+            // Show only surah name
+            tvAyahAddress.setText(surahNameDisplay);
 
             // Set comment text
             String commentKey = ayah.getSurahNumber() + ":" + ayah.getAyahNumber();

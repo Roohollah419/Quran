@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Surah name font size increased by 1.5x compared to other text for better prominence and readability
 - Share functionality continues to use plain text Arabic names for better compatibility across apps
 - Comment dialog preserves plain text surah names for readability in dialog context
+- Bookmark and comment views now show only surah name in address (ayah number removed to avoid redundancy since it appears in the ayah text)
 
 ## [1.2.0] - 2026-02-22
 

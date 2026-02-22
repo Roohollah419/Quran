@@ -130,15 +130,13 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
                 tvBismillah.setVisibility(View.GONE);
             }
 
-            // Set Ayah address
+            // Set Ayah address (only surah name, ayah number is shown in the ayah text)
             boolean isArabic = settingsManager.isArabicLanguage();
             String surahName;
-            String ayahNumberDisplay;
 
             if (isArabic) {
                 // Use custom calligraphy font for Arabic surah names
                 surahName = SurahFontHelper.getCharacter(ayah.getSurahNumber());
-                ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
                 tvAyahAddress.setTypeface(SurahFontHelper.getTypeface(context));
                 tvAyahAddress.setTextSize(14 * fontSizeMultiplier * 1.5f);
             } else {
@@ -146,13 +144,12 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
                 if (surahName == null) {
                     surahName = "Surah " + ayah.getSurahNumber();
                 }
-                ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
                 tvAyahAddress.setTypeface(Typeface.DEFAULT);
                 tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
             }
 
-            // Format: "Surah Name (Ayah Number)" or "اسم السورة (رقم الآية)"
-            tvAyahAddress.setText(String.format("%s (%s)", surahName, ayahNumberDisplay));
+            // Show only surah name
+            tvAyahAddress.setText(surahName);
 
             // Apply font size
             tvAyahArabic.setTextSize(24 * fontSizeMultiplier);
