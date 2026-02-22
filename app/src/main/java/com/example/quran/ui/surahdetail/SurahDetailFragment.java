@@ -20,6 +20,7 @@ import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
 import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
+import com.example.quran.utils.SurahFontHelper;
 import com.example.quran.utils.ViewModelFactory;
 
 import java.io.IOException;
@@ -92,11 +93,13 @@ public class SurahDetailFragment extends BaseFragment {
 
                 // Set surah name based on language
                 if (isArabic) {
-                    tvSurahName.setText(surah.getNameArabic());
+                    // Use custom calligraphy font for display
+                    tvSurahName.setText(SurahFontHelper.getCharacter(surah.getNumber()));
+                    tvSurahName.setTypeface(SurahFontHelper.getTypeface(requireContext()));
+                    // Increase font size for calligraphy
+                    tvSurahName.setTextSize(18 * settingsManager.getFontSizeMultiplier() * 1.5f);
+                    // Keep plain Arabic text for sharing
                     adapter.setSurahName(surah.getNameArabic());
-                    if (arabicTypeface != null) {
-                        tvSurahName.setTypeface(arabicTypeface);
-                    }
                     // Show surah number and ayah count in Arabic numerals
                     tvSurahNumber.setText(convertToArabicNumerals(String.valueOf(surah.getNumber())));
                     tvSurahInfo.setText(convertToArabicNumerals(String.valueOf(surah.getTotalAyahs())));
@@ -104,6 +107,7 @@ public class SurahDetailFragment extends BaseFragment {
                     tvSurahName.setText(surah.getNameEnglish());
                     adapter.setSurahName(surah.getNameEnglish());
                     tvSurahName.setTypeface(Typeface.DEFAULT_BOLD);
+                    tvSurahName.setTextSize(18 * settingsManager.getFontSizeMultiplier());
                     // Show surah number and ayah count in English numerals
                     tvSurahNumber.setText(String.valueOf(surah.getNumber()));
                     tvSurahInfo.setText(String.valueOf(surah.getTotalAyahs()));
@@ -155,7 +159,7 @@ public class SurahDetailFragment extends BaseFragment {
 
     private void applyFontSize() {
         float multiplier = settingsManager.getFontSizeMultiplier();
-        tvSurahName.setTextSize(18 * multiplier);
+        // tvSurahName font size is set in observeData based on language
         tvSurahNumber.setTextSize(16 * multiplier);
         tvSurahInfo.setTextSize(16 * multiplier);
     }

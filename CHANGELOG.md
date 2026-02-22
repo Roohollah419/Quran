@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share icon (24dp filled) in ayah items positioned before comment and bookmark icons
 - Share text includes Arabic text, English translation, ayah address (Surah name and ayah number), app name (Tilawah+), and GitHub repository link
 - Android Intent chooser for selecting sharing method (SMS, Bluetooth, WhatsApp, email, etc.)
+- Custom Arabic calligraphy font (`surah_names.ttf`) for displaying all 114 Surah names with beautiful glyphs
+- SurahFontHelper utility class for managing surah font loading and unicode character mapping
+- Unicode-based surah name display using Private Use Area characters (U+E900 to U+E972)
 
 ### Changed
 - Updated ayah item layout to include share icon with proper constraint positioning
@@ -20,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share text format now promotes the app with "Shared from Tilawah+" and GitHub link (https://github.com/Roohollah419/Quran)
 - Bookmark and comment outline icons now use primary color (green) instead of text_secondary for better visibility in both light and dark themes
 - All ayah action icons (share, comment, bookmark) now consistently use primary color regardless of their state
+- All Arabic surah names throughout the app now display with custom calligraphy font for enhanced visual appeal
+- Surah list, surah detail header, bookmarks, comments, and home screen now show decorative Arabic calligraphy for surah names
+- Surah name font size increased by 1.5x compared to other text for better prominence and readability
+- Share functionality continues to use plain text Arabic names for better compatibility across apps
+- Comment dialog preserves plain text surah names for readability in dialog context
 
 ## [1.2.0] - 2026-02-22
 

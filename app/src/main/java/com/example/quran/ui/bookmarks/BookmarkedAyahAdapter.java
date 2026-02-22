@@ -16,6 +16,7 @@ import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
 import com.example.quran.utils.BookmarkManager;
 import com.example.quran.utils.SettingsManager;
+import com.example.quran.utils.SurahFontHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,17 +136,19 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
             String ayahNumberDisplay;
 
             if (isArabic) {
-                surahName = surahNamesArabic.get(ayah.getSurahNumber());
-                if (surahName == null) {
-                    surahName = "السورة " + convertToArabicNumerals(String.valueOf(ayah.getSurahNumber()));
-                }
+                // Use custom calligraphy font for Arabic surah names
+                surahName = SurahFontHelper.getCharacter(ayah.getSurahNumber());
                 ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+                tvAyahAddress.setTypeface(SurahFontHelper.getTypeface(context));
+                tvAyahAddress.setTextSize(14 * fontSizeMultiplier * 1.5f);
             } else {
                 surahName = surahNamesEnglish.get(ayah.getSurahNumber());
                 if (surahName == null) {
                     surahName = "Surah " + ayah.getSurahNumber();
                 }
                 ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
+                tvAyahAddress.setTypeface(Typeface.DEFAULT);
+                tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
             }
 
             // Format: "Surah Name (Ayah Number)" or "اسم السورة (رقم الآية)"
@@ -155,7 +158,7 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
             tvAyahArabic.setTextSize(24 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
             tvBismillah.setTextSize(24 * fontSizeMultiplier);
-            tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
+            // tvAyahAddress font size is set above based on language
 
             // Apply Uthman Taha Naskh font to Arabic text
             if (arabicTypeface != null) {

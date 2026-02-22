@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quran.R;
 import com.example.quran.data.model.Surah;
 import com.example.quran.utils.SettingsManager;
+import com.example.quran.utils.SurahFontHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,13 +107,14 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
 
             // Set Surah name
             if (isArabic) {
-                tvSurahName.setText(surah.getNameArabic());
-                if (arabicTypeface != null) {
-                    tvSurahName.setTypeface(arabicTypeface);
-                }
+                // Use custom calligraphy font for Arabic surah names
+                tvSurahName.setText(SurahFontHelper.getCharacter(surah.getNumber()));
+                tvSurahName.setTypeface(SurahFontHelper.getTypeface(context));
+                tvSurahName.setTextSize(18 * fontSizeMultiplier * 1.5f);
             } else {
                 tvSurahName.setText(surah.getNameEnglish());
                 tvSurahName.setTypeface(Typeface.DEFAULT);
+                tvSurahName.setTextSize(18 * fontSizeMultiplier);
             }
 
             // Set ayah count
@@ -147,8 +149,7 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
                 e.printStackTrace();
             }
 
-            // Apply font size
-            tvSurahName.setTextSize(18 * fontSizeMultiplier);
+            // Apply font size (already set for tvSurahName above based on language)
             tvAyahCount.setTextSize(16 * fontSizeMultiplier);
             tvNumber.setTextSize(16 * fontSizeMultiplier);
         }

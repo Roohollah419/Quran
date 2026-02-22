@@ -15,6 +15,7 @@ import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
 import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
+import com.example.quran.utils.SurahFontHelper;
 import com.example.quran.utils.ViewModelFactory;
 
 /**
@@ -90,11 +91,16 @@ public class HomeFragment extends BaseFragment {
                         String ayahNumberDisplay;
 
                         if (isArabic) {
-                            surahName = surah.getNameArabic();
+                            // Use custom calligraphy font for Arabic surah names
+                            surahName = SurahFontHelper.getCharacter(surah.getNumber());
                             ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+                            tvAyahInfo.setTypeface(SurahFontHelper.getTypeface(requireContext()));
+                            tvAyahInfo.setTextSize(14 * settingsManager.getFontSizeMultiplier() * 1.5f);
                         } else {
                             surahName = surah.getNameEnglish();
                             ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
+                            tvAyahInfo.setTypeface(android.graphics.Typeface.DEFAULT);
+                            tvAyahInfo.setTextSize(14);
                         }
 
                         String ayahInfo = String.format("%s (%s)", surahName, ayahNumberDisplay);

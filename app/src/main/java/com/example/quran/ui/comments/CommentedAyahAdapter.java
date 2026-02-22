@@ -17,6 +17,7 @@ import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
 import com.example.quran.utils.CommentManager;
 import com.example.quran.utils.SettingsManager;
+import com.example.quran.utils.SurahFontHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,27 +143,36 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
 
             // Set Ayah address
             boolean isArabic = settingsManager.isArabicLanguage();
-            final String surahName;
+            final String surahName; // Plain text for dialog
+            String surahNameDisplay; // Display text (font glyph for Arabic)
             String ayahNumberDisplay;
 
             if (isArabic) {
+                // Plain text for dialog
                 String tempSurahName = surahNamesArabic.get(ayah.getSurahNumber());
                 if (tempSurahName == null) {
                     tempSurahName = "السورة " + convertToArabicNumerals(String.valueOf(ayah.getSurahNumber()));
                 }
                 surahName = tempSurahName;
+                // Custom calligraphy font for display
+                surahNameDisplay = SurahFontHelper.getCharacter(ayah.getSurahNumber());
                 ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+                tvAyahAddress.setTypeface(SurahFontHelper.getTypeface(context));
+                tvAyahAddress.setTextSize(14 * fontSizeMultiplier * 1.5f);
             } else {
                 String tempSurahName = surahNamesEnglish.get(ayah.getSurahNumber());
                 if (tempSurahName == null) {
                     tempSurahName = "Surah " + ayah.getSurahNumber();
                 }
                 surahName = tempSurahName;
+                surahNameDisplay = tempSurahName;
                 ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
+                tvAyahAddress.setTypeface(Typeface.DEFAULT);
+                tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
             }
 
             // Format: "Surah Name (Ayah Number)" or "اسم السورة (رقم الآية)"
-            tvAyahAddress.setText(String.format("%s (%s)", surahName, ayahNumberDisplay));
+            tvAyahAddress.setText(String.format("%s (%s)", surahNameDisplay, ayahNumberDisplay));
 
             // Set comment text
             String commentKey = ayah.getSurahNumber() + ":" + ayah.getAyahNumber();
@@ -177,7 +187,7 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
             tvAyahArabic.setTextSize(24 * fontSizeMultiplier);
             tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
             tvBismillah.setTextSize(24 * fontSizeMultiplier);
-            tvAyahAddress.setTextSize(14 * fontSizeMultiplier);
+            // tvAyahAddress font size is set above based on language
             tvCommentText.setTextSize(14 * fontSizeMultiplier);
 
             // Apply Uthman Taha Naskh font to Arabic text
