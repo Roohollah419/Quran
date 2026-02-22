@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extended AyahAdapter to handle share icon click events with formatted share text
 - Share icon uses primary color for filled appearance consistent with app theme
 - Share text format now promotes the app with "Shared from Tilawah+" and GitHub link (https://github.com/Roohollah419/Quran)
+- Bookmark and comment outline icons now use primary color (green) instead of text_secondary for better visibility in both light and dark themes
+- All ayah action icons (share, comment, bookmark) now consistently use primary color regardless of their state
 
 ## [1.2.0] - 2026-02-22
 
