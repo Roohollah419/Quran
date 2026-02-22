@@ -29,6 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share functionality continues to use plain text Arabic names for better compatibility across apps
 - Comment dialog preserves plain text surah names for readability in dialog context
 - Bookmark and comment views now show only surah name in address (ayah number removed to avoid redundancy since it appears in the ayah text)
+- Comment dialog toolbar now has 32dp top margin to prevent title from overlapping with Android status bar icons
+- Comment dialog button layout now has 32dp bottom margin to prevent save button from overlapping with Android navigation buttons
+- Comment dialog title (Add Comment/Edit Comment) is now hidden for a cleaner interface
+- Comment dialog toolbar background is now transparent with no elevation/shadow
+- Comment dialog close button now uses primary color (green) for better visibility and consistency
+- Bookmarks view title is now hidden for a cleaner, more spacious layout
+- Comments view title is now hidden for a cleaner, more spacious layout
+- RecyclerView content in bookmarks and comments now starts from the top of the screen
 
 ## [1.2.0] - 2026-02-22
 
