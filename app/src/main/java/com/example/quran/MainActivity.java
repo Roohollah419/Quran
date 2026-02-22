@@ -87,6 +87,8 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.action_surahListFragment_to_bookmarksFragment);
             } else if (currentDestination == R.id.surahDetailFragment) {
                 navController.navigate(R.id.action_surahDetailFragment_to_bookmarksFragment);
+            } else if (currentDestination == R.id.commentsFragment) {
+                navController.navigate(R.id.action_commentsFragment_to_bookmarksFragment);
             }
         }
     }
@@ -100,6 +102,8 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.action_surahListFragment_to_commentsFragment);
             } else if (currentDestination == R.id.surahDetailFragment) {
                 navController.navigate(R.id.action_surahDetailFragment_to_commentsFragment);
+            } else if (currentDestination == R.id.bookmarksFragment) {
+                navController.navigate(R.id.action_bookmarksFragment_to_commentsFragment);
             }
         }
     }

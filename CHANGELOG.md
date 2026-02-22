@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comments view title is now hidden for a cleaner, more spacious layout
 - RecyclerView content in bookmarks and comments now starts from the top of the screen
 
+### Fixed
+- Navigation bug where clicking comment icon from bookmarks view (and vice versa) did nothing
+- Added missing navigation actions between bookmarksFragment and commentsFragment in nav_graph.xml
+- Toolbar buttons now work correctly from all fragments including bookmarks and comments views
+
 ## [1.2.0] - 2026-02-22
 
 ### Added
