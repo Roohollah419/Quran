@@ -3,43 +3,60 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/padding_large">
+    android:layout_height="match_parent">
 
-    <!-- Random Ayah in the center -->
-    <TextView
-        android:id="@+id/tvRandomAyahArabic"
+    <!-- Scrollable Ayah Content -->
+    <ScrollView
+        android:id="@+id/scrollViewAyah"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:fontFamily="@font/uthmantaha"
-        android:textDirection="rtl"
-        android:gravity="center"
-        android:lineSpacingExtra="12dp"
-        android:textColor="@color/text_primary"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingStart="@dimen/padding_large"
+        android:paddingEnd="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvAyahInfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"/>
-
-    <!-- Ayah Info (Surah name and Ayah number) -->
-    <TextView
-        android:id="@+id/tvAyahInfo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:textDirection="ltr"
-        android:textColor="@color/text_secondary"
-        android:layout_marginTop="@dimen/padding_medium"
         app:layout_constraintBottom_toTopOf="@id/btnSkip"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="@dimen/padding_large"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Random Ayah in the center -->
+            <TextView
+                android:id="@+id/tvRandomAyahArabic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:fontFamily="@font/uthmantaha"
+                android:textDirection="rtl"
+                android:gravity="center"
+                android:lineSpacingExtra="12dp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"/>
+
+            <!-- Ayah Info (Surah name and Ayah number) -->
+            <TextView
+                android:id="@+id/tvAyahInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textColor="@color/text_secondary"
+                android:textStyle="italic"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <!-- Skip Button -->
     <com.google.android.material.button.MaterialButton

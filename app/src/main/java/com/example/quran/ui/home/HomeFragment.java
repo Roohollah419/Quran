@@ -84,11 +84,37 @@ public class HomeFragment extends BaseFragment {
                 // Get Surah information to display Surah name
                 viewModel.getSurahByNumber(ayah.getSurahNumber()).observe(getViewLifecycleOwner(), surah -> {
                     if (surah != null) {
-                        String ayahInfo = surah.getNameEnglish() + " - Ayah " + ayah.getAyahNumber();
+                        // Format: "Surah Name (Ayah Number)" or "اسم السورة (رقم الآية)"
+                        boolean isArabic = settingsManager.isArabicLanguage();
+                        String surahName;
+                        String ayahNumberDisplay;
+
+                        if (isArabic) {
+                            surahName = surah.getNameArabic();
+                            ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+                        } else {
+                            surahName = surah.getNameEnglish();
+                            ayahNumberDisplay = String.valueOf(ayah.getAyahNumber());
+                        }
+
+                        String ayahInfo = String.format("%s (%s)", surahName, ayahNumberDisplay);
                         tvAyahInfo.setText(ayahInfo);
                     }
                 });
             }
         });
+    }
+
+    private String convertToArabicNumerals(String number) {
+        char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
+        StringBuilder result = new StringBuilder();
+        for (char c : number.toCharArray()) {
+            if (Character.isDigit(c)) {
+                result.append(arabicNumerals[c - '0']);
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 }
