@@ -57,6 +57,10 @@ public class SurahDetailFragment extends BaseFragment {
     private boolean isOverscrolling = false;
     private boolean hasTriggeredHaptic = false;
     private static final float THRESHOLD_DP = 150f; // 150dp threshold for navigation
+    private static final int OVERSCROLL_NONE = 0;
+    private static final int OVERSCROLL_NEXT = 1;
+    private static final int OVERSCROLL_PREVIOUS = 2;
+    private int overscrollDirection = OVERSCROLL_NONE;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -229,6 +233,7 @@ public class SurahDetailFragment extends BaseFragment {
                 initialTouchY = event.getY();
                 overscrollDistance = 0f;
                 hasTriggeredHaptic = false;
+                overscrollDirection = OVERSCROLL_NONE;
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -240,14 +245,16 @@ public class SurahDetailFragment extends BaseFragment {
                 boolean isAtBottom = !recyclerView.canScrollVertically(1);
 
                 // Handle overscroll at bottom (pull down for next surah)
-                if (isAtBottom && deltaY < 0) {
+                if (isAtBottom && deltaY < 0 && surahNumber < 114) {
                     isOverscrolling = true;
+                    overscrollDirection = OVERSCROLL_NEXT;
                     overscrollDistance = Math.abs(deltaY);
                     updateNextSurahIndicator(overscrollDistance);
                 }
                 // Handle overscroll at top (pull up for previous surah)
-                else if (isAtTop && deltaY > 0) {
+                else if (isAtTop && deltaY > 0 && surahNumber > 1) {
                     isOverscrolling = true;
+                    overscrollDirection = OVERSCROLL_PREVIOUS;
                     overscrollDistance = Math.abs(deltaY);
                     updatePreviousSurahIndicator(overscrollDistance);
                 }
@@ -315,16 +322,15 @@ public class SurahDetailFragment extends BaseFragment {
     }
 
     private void performNavigation() {
-        boolean isAtTop = !recyclerView.canScrollVertically(-1);
-        boolean isAtBottom = !recyclerView.canScrollVertically(1);
-
         // Reset RecyclerView position immediately before navigation
         recyclerView.setTranslationY(0f);
 
-        if (isAtBottom && surahNumber < 114) {
+        // Use the stored overscroll direction instead of rechecking scroll state
+        // This prevents race conditions where the RecyclerView state changes between detection and navigation
+        if (overscrollDirection == OVERSCROLL_NEXT && surahNumber < 114) {
             // Navigate to next surah with slide up animation
             navigateToNextSurah(surahNumber + 1);
-        } else if (isAtTop && surahNumber > 1) {
+        } else if (overscrollDirection == OVERSCROLL_PREVIOUS && surahNumber > 1) {
             // Navigate to previous surah with slide down animation
             navigateToPreviousSurah(surahNumber - 1);
         }
@@ -352,6 +358,7 @@ public class SurahDetailFragment extends BaseFragment {
         isOverscrolling = false;
         overscrollDistance = 0f;
         hasTriggeredHaptic = false;
+        overscrollDirection = OVERSCROLL_NONE;
 
         // Animate RecyclerView back to original position
         recyclerView.animate()

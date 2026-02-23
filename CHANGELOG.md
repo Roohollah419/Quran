@@ -55,6 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Toolbar buttons now work correctly from all fragments including bookmarks and comments views
 - Overscroll navigation bug where consecutive navigation in the same direction would alternate between two surahs
 - surahNumber variable now updates when new surah data loads, ensuring correct sequential navigation
+- Overscroll navigation race condition where navigation would sometimes fail to trigger
+- Added overscroll direction tracking to prevent RecyclerView state changes from interfering with navigation
+- Boundary checks now prevent overscroll indicators from appearing at first/last Surah
 
 ## [1.2.0] - 2026-02-22
 
