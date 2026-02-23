@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-02-23
+
+### Added
+- Create Image feature for sharing ayahs as beautiful images with custom backgrounds
+- New image creation icon (24dp) in ayah items for generating shareable images positioned after share icon
+- Image picker with Camera and Gallery options for selecting background images
+- ImageEditorActivity screen with draggable text positioning for customizing image layout
+- Semi-transparent text background (50% black, 16dp rounded corners) for readability on any image background
+- Automatic save to Pictures/Quran directory with MediaStore API for proper gallery integration
+- Share functionality for generated images with Android share dialog
+- Arabic text overlay using custom calligraphy font (uthmantaha.ttf) for authentic Quran text rendering
+- Surah name and ayah number display on images below Arabic text
+- FileProvider configuration for camera photo capture on Android 7+ (prevents FileUriExposedException)
+- PermissionHelper utility for camera and storage permissions across different Android versions (API 23-34+)
+- ImageOverlayHelper utility for Canvas-based image generation with text overlay
+- Camera permission (android.permission.CAMERA) for taking photos with camera
+- Read Media Images permission (android.permission.READ_MEDIA_IMAGES) for accessing gallery photos (Android 13+)
+- Read External Storage permission (android.permission.READ_EXTERNAL_STORAGE) for accessing gallery photos (Android 12 and below)
+- Write External Storage permission (android.permission.WRITE_EXTERNAL_STORAGE) for saving images (Android 9 and below)
+- Scoped storage support for Android 10+ using MediaStore API with proper IS_PENDING flag handling
+- Image scaling to max 2048x2048 pixels to prevent OutOfMemoryError with large images
+- Progress indicator during image generation with AsyncTask background processing
+- Text box padding (24dp) and positioning constraints to keep text within image bounds
+- Multi-line text support with StaticLayout for proper Arabic text wrapping
+- Maximum text width set to 80% of image width for proper readability
+
+### Changed
+- Updated ayah item layout to include create image icon positioned after share icon and before comment icon
+- Extended AyahAdapter with OnCreateImageClickListener callback interface for image creation
+- SurahDetailFragment now handles image picker and editor activity launches with ActivityResultLauncher
+- Share icon constraint updated to position before create image icon instead of comment icon
+- Comment icon constraint updated to position after create image icon instead of share icon
+
+### Added Permissions
+- CAMERA - For taking photos with device camera
+- READ_MEDIA_IMAGES - For accessing gallery photos (Android 13+)
+- READ_EXTERNAL_STORAGE - For accessing gallery photos (Android 12 and below)
+- WRITE_EXTERNAL_STORAGE - For saving images (Android 9 and below)
+
 ## [1.3.0] - 2026-02-22
 
 ### Added

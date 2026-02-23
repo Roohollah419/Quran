@@ -1,19 +1,28 @@
 package com.example.quran.ui.surahdetail;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -21,13 +30,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
+import com.example.quran.data.model.Ayah;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
+import com.example.quran.ui.imageeditor.ImageEditorActivity;
 import com.example.quran.utils.Constants;
+import com.example.quran.utils.PermissionHelper;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
 import com.example.quran.utils.ViewModelFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -49,6 +62,13 @@ public class SurahDetailFragment extends BaseFragment {
     private int surahNumber;
     private int scrollToAyah = -1;
 
+    // Image creation fields
+    private Uri tempPhotoUri;
+    private Ayah currentAyahForImage;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private ActivityResultLauncher<Uri> cameraLauncher;
+    private String currentSurahName = "";
+
     // Overscroll navigation fields
     private TextView tvNextSurahIndicator;
     private TextView tvPreviousSurahIndicator;
@@ -64,7 +84,34 @@ public class SurahDetailFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Register activity result launchers before view creation
+        registerActivityResultLaunchers();
         return inflater.inflate(R.layout.fragment_surah_detail, container, false);
+    }
+
+    private void registerActivityResultLaunchers() {
+        // Gallery launcher
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        if (imageUri != null) {
+                            launchImageEditor(imageUri);
+                        }
+                    }
+                }
+        );
+
+        // Camera launcher
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
+                success -> {
+                    if (success && tempPhotoUri != null) {
+                        launchImageEditor(tempPhotoUri);
+                    }
+                }
+        );
     }
 
     @Override
@@ -86,6 +133,12 @@ public class SurahDetailFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new AyahAdapter(settingsManager.getFontSizeMultiplier(), requireContext());
         recyclerView.setAdapter(adapter);
+
+        // Set create image callback
+        adapter.setOnCreateImageClickListener(ayah -> {
+            currentAyahForImage = ayah;
+            showImageSourceDialog();
+        });
 
         // Setup overscroll navigation
         setupOverscrollNavigation();
@@ -125,12 +178,14 @@ public class SurahDetailFragment extends BaseFragment {
                     // Increase font size for calligraphy
                     tvSurahName.setTextSize(18 * settingsManager.getFontSizeMultiplier() * 1.5f);
                     // Keep plain Arabic text for sharing
+                    currentSurahName = surah.getNameArabic();
                     adapter.setSurahName(surah.getNameArabic());
                     // Show surah number and ayah count in Arabic numerals
                     tvSurahNumber.setText(convertToArabicNumerals(String.valueOf(surah.getNumber())));
                     tvSurahInfo.setText(convertToArabicNumerals(String.valueOf(surah.getTotalAyahs())));
                 } else {
                     tvSurahName.setText(surah.getNameEnglish());
+                    currentSurahName = surah.getNameEnglish();
                     adapter.setSurahName(surah.getNameEnglish());
                     tvSurahName.setTypeface(Typeface.DEFAULT_BOLD);
                     tvSurahName.setTextSize(18 * settingsManager.getFontSizeMultiplier());
@@ -387,5 +442,102 @@ public class SurahDetailFragment extends BaseFragment {
 
     private float dpToPx(float dp) {
         return dp * requireContext().getResources().getDisplayMetrics().density;
+    }
+
+    // Image creation methods
+
+    private void showImageSourceDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.select_image_source);
+        builder.setItems(new String[]{
+                getString(R.string.camera),
+                getString(R.string.gallery)
+        }, (dialog, which) -> {
+            if (which == 0) {
+                launchCamera();
+            } else {
+                launchGallery();
+            }
+        });
+        builder.show();
+    }
+
+    private void launchCamera() {
+        // Check camera permission
+        if (!PermissionHelper.checkCameraPermission(requireActivity())) {
+            PermissionHelper.requestCameraPermission(
+                    requireActivity(),
+                    PermissionHelper.REQUEST_CAMERA_PERMISSION
+            );
+            return;
+        }
+
+        try {
+            // Create temp file for photo
+            File photoFile = File.createTempFile(
+                    "quran_photo_",
+                    ".jpg",
+                    requireContext().getExternalCacheDir()
+            );
+
+            tempPhotoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().getPackageName() + ".fileprovider",
+                    photoFile
+            );
+
+            cameraLauncher.launch(tempPhotoUri);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Failed to create temp file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void launchGallery() {
+        // Check storage permission
+        if (!PermissionHelper.checkStoragePermission(requireActivity())) {
+            PermissionHelper.requestStoragePermission(
+                    requireActivity(),
+                    PermissionHelper.REQUEST_STORAGE_PERMISSION
+            );
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        galleryLauncher.launch(intent);
+    }
+
+    private void launchImageEditor(Uri imageUri) {
+        if (currentAyahForImage == null) {
+            return;
+        }
+
+        Intent intent = new Intent(requireContext(), ImageEditorActivity.class);
+        intent.putExtra(ImageEditorActivity.EXTRA_IMAGE_URI, imageUri.toString());
+        intent.putExtra(ImageEditorActivity.EXTRA_ARABIC_TEXT, currentAyahForImage.getTextArabic());
+        intent.putExtra(ImageEditorActivity.EXTRA_SURAH_NAME, currentSurahName);
+        intent.putExtra(ImageEditorActivity.EXTRA_AYAH_NUMBER, currentAyahForImage.getAyahNumber());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PermissionHelper.REQUEST_CAMERA_PERMISSION) {
+            if (PermissionHelper.isPermissionGranted(grantResults)) {
+                launchCamera();
+            } else {
+                Toast.makeText(requireContext(), R.string.camera_permission_required, Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PermissionHelper.REQUEST_STORAGE_PERMISSION) {
+            if (PermissionHelper.isPermissionGranted(grantResults)) {
+                launchGallery();
+            } else {
+                Toast.makeText(requireContext(), R.string.storage_permission_required, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

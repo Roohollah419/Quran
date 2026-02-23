@@ -55,4 +55,17 @@
 
     <!-- Share -->
     <string name="share_ayah">Share Ayah</string>
+
+    <!-- Image Creation -->
+    <string name="create_image">Create Image</string>
+    <string name="select_image_source">Select Image Source</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="save_and_share">Save &amp; Share</string>
+    <string name="generating_image">Generating image...</string>
+    <string name="image_saved">Image saved to gallery</string>
+    <string name="image_save_failed">Failed to save image</string>
+    <string name="drag_to_position">Drag text to position it</string>
+    <string name="camera_permission_required">Camera permission is required to take photos</string>
+    <string name="storage_permission_required">Storage permission is required to access photos</string>
 </resources>

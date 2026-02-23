@@ -78,6 +78,21 @@
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintTop_toTopOf="@id/tvAyahTranslation"
+            app:layout_constraintEnd_toStartOf="@id/ivCreateImage"/>
+
+        <ImageView
+            android:id="@+id/ivCreateImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_image_create"
+            android:contentDescription="@string/create_image"
+            android:padding="2dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/primary"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="@id/tvAyahTranslation"
             app:layout_constraintEnd_toStartOf="@id/ivComment"/>
 
         <ImageView

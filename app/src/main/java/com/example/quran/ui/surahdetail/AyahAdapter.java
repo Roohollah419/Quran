@@ -40,6 +40,14 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
     private BookmarkManager bookmarkManager;
     private CommentManager commentManager;
     private String surahName = "";
+    private OnCreateImageClickListener createImageListener;
+
+    /**
+     * Interface for handling create image button clicks.
+     */
+    public interface OnCreateImageClickListener {
+        void onCreateImageClick(Ayah ayah);
+    }
 
     public AyahAdapter(float fontSizeMultiplier, Context context) {
         this.fontSizeMultiplier = fontSizeMultiplier;
@@ -52,6 +60,10 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
 
     public void setSurahName(String surahName) {
         this.surahName = surahName;
+    }
+
+    public void setOnCreateImageClickListener(OnCreateImageClickListener listener) {
+        this.createImageListener = listener;
     }
 
     @NonNull
@@ -82,6 +94,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
         private TextView tvAyahTranslation;
         private TextView tvBismillah;
         private ImageView ivShare;
+        private ImageView ivCreateImage;
         private ImageView ivComment;
         private ImageView ivBookmark;
 
@@ -91,6 +104,7 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
             tvAyahTranslation = itemView.findViewById(R.id.tvAyahTranslation);
             tvBismillah = itemView.findViewById(R.id.tvBismillah);
             ivShare = itemView.findViewById(R.id.ivShare);
+            ivCreateImage = itemView.findViewById(R.id.ivCreateImage);
             ivComment = itemView.findViewById(R.id.ivComment);
             ivBookmark = itemView.findViewById(R.id.ivBookmark);
         }
@@ -139,6 +153,13 @@ public class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.AyahViewHolder
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
                 context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_ayah)));
+            });
+
+            // Handle create image click
+            ivCreateImage.setOnClickListener(v -> {
+                if (createImageListener != null) {
+                    createImageListener.onCreateImageClick(ayah);
+                }
             });
 
             // Set comment icon based on current state
