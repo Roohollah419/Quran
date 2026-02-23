@@ -112,17 +112,52 @@
         </LinearLayout>
     </FrameLayout>
 
-    <!-- RecyclerView for Ayahs -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAyahs"
+    <!-- Container for RecyclerView and indicators -->
+    <FrameLayout
+        android:id="@+id/frameContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="@dimen/padding_small"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/frameLayoutSurahHeader"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Top overscroll indicator (behind RecyclerView) -->
+        <TextView
+            android:id="@+id/tvPreviousSurahIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="↑ Previous Surah"
+            android:textSize="16sp"
+            android:textColor="@color/primary"
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_gravity="top"
+            android:visibility="gone"/>
+
+        <!-- Bottom overscroll indicator (behind RecyclerView) -->
+        <TextView
+            android:id="@+id/tvNextSurahIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="↓ Next Surah"
+            android:textSize="16sp"
+            android:textColor="@color/primary"
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_gravity="bottom"
+            android:visibility="gone"/>
+
+        <!-- RecyclerView for Ayahs (on top, will be translated) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAyahs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/padding_small"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
+            android:background="@color/background"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

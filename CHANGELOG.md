@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom Arabic calligraphy font (`surah_names.ttf`) for displaying all 114 Surah names with beautiful glyphs
 - SurahFontHelper utility class for managing surah font loading and unicode character mapping
 - Unicode-based surah name display using Private Use Area characters (U+E900 to U+E972)
+- Telegram-style overscroll navigation in Surah detail view for quick navigation between Surahs
+- Pull down at bottom of Surah to navigate to next Surah (works for Surahs 1-113)
+- Pull up at top of Surah to navigate to previous Surah (works for Surahs 2-114)
+- Pull-to-reveal mechanism: page physically moves up/down during overscroll, revealing indicator in the space created
+- Visual feedback indicators showing progress toward threshold (150dp) in revealed space
+- Percentage display during overscroll with confirmation message when threshold is reached
+- Haptic feedback vibration when navigation threshold is reached
+- Smooth spring-back animation when releasing before threshold or canceling
+- RecyclerView translation with background color to create physical pull effect
+- Directional slide animations: next Surah slides up from bottom, previous Surah slides down from top
+- Two separate navigation actions with matching animations for intuitive directional transitions
 
 ### Changed
 - Updated ayah item layout to include share icon with proper constraint positioning
@@ -42,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Navigation bug where clicking comment icon from bookmarks view (and vice versa) did nothing
 - Added missing navigation actions between bookmarksFragment and commentsFragment in nav_graph.xml
 - Toolbar buttons now work correctly from all fragments including bookmarks and comments views
+- Overscroll navigation bug where consecutive navigation in the same direction would alternate between two surahs
+- surahNumber variable now updates when new surah data loads, ensuring correct sequential navigation
 
 ## [1.2.0] - 2026-02-22
 
