@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -147,10 +149,29 @@ public class ImageOverlayHelper {
 
     /**
      * Load and scale image from URI if it's too large.
+     * Properly handles EXIF orientation to ensure image is correctly rotated.
      */
     private static Bitmap loadAndScaleImage(Context context, Uri imageUri) {
         try {
             ContentResolver resolver = context.getContentResolver();
+
+            // Step 1: Get EXIF orientation before loading bitmap
+            int orientation = ExifInterface.ORIENTATION_NORMAL;
+            try {
+                InputStream exifStream = resolver.openInputStream(imageUri);
+                if (exifStream != null) {
+                    ExifInterface exif = new ExifInterface(exifStream);
+                    orientation = exif.getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_NORMAL
+                    );
+                    exifStream.close();
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Could not read EXIF data, assuming normal orientation", e);
+            }
+
+            // Step 2: Decode bitmap with scaling
             InputStream inputStream = resolver.openInputStream(imageUri);
             if (inputStream == null) {
                 return null;
@@ -176,11 +197,78 @@ public class ImageOverlayHelper {
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
             inputStream.close();
 
+            if (bitmap == null) {
+                return null;
+            }
+
+            // Step 3: Apply EXIF rotation
+            bitmap = rotateBitmapByExif(bitmap, orientation);
+
             return bitmap;
 
         } catch (IOException e) {
             Log.e(TAG, "Error loading image", e);
             return null;
+        }
+    }
+
+    /**
+     * Rotate bitmap based on EXIF orientation tag.
+     */
+    private static Bitmap rotateBitmapByExif(Bitmap bitmap, int orientation) {
+        Matrix matrix = new Matrix();
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.postScale(1, -1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.postRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.postRotate(270);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_NORMAL:
+            case ExifInterface.ORIENTATION_UNDEFINED:
+            default:
+                return bitmap; // No rotation needed
+        }
+
+        try {
+            Bitmap rotatedBitmap = Bitmap.createBitmap(
+                    bitmap,
+                    0,
+                    0,
+                    bitmap.getWidth(),
+                    bitmap.getHeight(),
+                    matrix,
+                    true
+            );
+
+            // Recycle original bitmap if a new one was created
+            if (rotatedBitmap != bitmap) {
+                bitmap.recycle();
+            }
+
+            return rotatedBitmap;
+
+        } catch (OutOfMemoryError e) {
+            Log.e(TAG, "Out of memory while rotating bitmap", e);
+            return bitmap; // Return original if rotation fails
         }
     }
 

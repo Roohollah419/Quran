@@ -38,6 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share icon constraint updated to position before create image icon instead of comment icon
 - Comment icon constraint updated to position after create image icon instead of share icon
 
+### Fixed
+- Permission flow bug where camera/gallery would not launch immediately after granting permission on first attempt
+- Replaced deprecated permission callback pattern with modern ActivityResultLauncher for reliable permission handling
+- Image rotation bug where camera photos with EXIF orientation metadata would be misaligned with text overlay
+- Implemented native ExifInterface (API 24+) to properly read and apply image rotation before text overlay
+- Text overlay now correctly aligns with rotated camera images in all orientations (portrait, landscape, and flipped)
+
 ### Added Permissions
 - CAMERA - For taking photos with device camera
 - READ_MEDIA_IMAGES - For accessing gallery photos (Android 13+)
