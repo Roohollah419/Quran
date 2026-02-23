@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -67,6 +68,8 @@ public class SurahDetailFragment extends BaseFragment {
     private Ayah currentAyahForImage;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private ActivityResultLauncher<Uri> cameraLauncher;
+    private ActivityResultLauncher<String> cameraPermissionLauncher;
+    private ActivityResultLauncher<String> storagePermissionLauncher;
     private String currentSurahName = "";
 
     // Overscroll navigation fields
@@ -90,6 +93,34 @@ public class SurahDetailFragment extends BaseFragment {
     }
 
     private void registerActivityResultLaunchers() {
+        // Camera permission launcher
+        cameraPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        // Permission granted, launch camera
+                        launchCameraIntent();
+                    } else {
+                        // Permission denied
+                        Toast.makeText(requireContext(), R.string.camera_permission_required, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Storage permission launcher
+        storagePermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        // Permission granted, launch gallery
+                        launchGalleryIntent();
+                    } else {
+                        // Permission denied
+                        Toast.makeText(requireContext(), R.string.storage_permission_required, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
         // Gallery launcher
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -465,13 +496,16 @@ public class SurahDetailFragment extends BaseFragment {
     private void launchCamera() {
         // Check camera permission
         if (!PermissionHelper.checkCameraPermission(requireActivity())) {
-            PermissionHelper.requestCameraPermission(
-                    requireActivity(),
-                    PermissionHelper.REQUEST_CAMERA_PERMISSION
-            );
+            // Request permission using modern API
+            cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA);
             return;
         }
 
+        // Permission already granted, launch camera
+        launchCameraIntent();
+    }
+
+    private void launchCameraIntent() {
         try {
             // Create temp file for photo
             File photoFile = File.createTempFile(
@@ -497,13 +531,20 @@ public class SurahDetailFragment extends BaseFragment {
     private void launchGallery() {
         // Check storage permission
         if (!PermissionHelper.checkStoragePermission(requireActivity())) {
-            PermissionHelper.requestStoragePermission(
-                    requireActivity(),
-                    PermissionHelper.REQUEST_STORAGE_PERMISSION
-            );
+            // Request permission using modern API based on Android version
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                storagePermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES);
+            } else {
+                storagePermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
             return;
         }
 
+        // Permission already granted, launch gallery
+        launchGalleryIntent();
+    }
+
+    private void launchGalleryIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         galleryLauncher.launch(intent);
@@ -522,22 +563,4 @@ public class SurahDetailFragment extends BaseFragment {
         startActivity(intent);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PermissionHelper.REQUEST_CAMERA_PERMISSION) {
-            if (PermissionHelper.isPermissionGranted(grantResults)) {
-                launchCamera();
-            } else {
-                Toast.makeText(requireContext(), R.string.camera_permission_required, Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == PermissionHelper.REQUEST_STORAGE_PERMISSION) {
-            if (PermissionHelper.isPermissionGranted(grantResults)) {
-                launchGallery();
-            } else {
-                Toast.makeText(requireContext(), R.string.storage_permission_required, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }
