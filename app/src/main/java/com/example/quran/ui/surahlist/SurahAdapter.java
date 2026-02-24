@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Surah;
+import com.example.quran.utils.ArabicNumeralConverter;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
 
@@ -120,7 +121,7 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
             // Set ayah count
             String ayahCount = String.valueOf(surah.getTotalAyahs());
             if (isArabic) {
-                tvAyahCount.setText(convertToArabicNumerals(ayahCount));
+                tvAyahCount.setText(ArabicNumeralConverter.convert(ayahCount));
             } else {
                 tvAyahCount.setText(ayahCount);
             }
@@ -128,7 +129,7 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
             // Set surah number
             String surahNumber = String.valueOf(surah.getNumber());
             if (isArabic) {
-                tvNumber.setText(convertToArabicNumerals(surahNumber));
+                tvNumber.setText(ArabicNumeralConverter.convert(surahNumber));
             } else {
                 tvNumber.setText(surahNumber);
             }
@@ -152,19 +153,6 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
             // Apply font size (already set for tvSurahName above based on language)
             tvAyahCount.setTextSize(16 * fontSizeMultiplier);
             tvNumber.setTextSize(16 * fontSizeMultiplier);
-        }
-
-        private String convertToArabicNumerals(String number) {
-            char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
-            StringBuilder result = new StringBuilder();
-            for (char c : number.toCharArray()) {
-                if (Character.isDigit(c)) {
-                    result.append(arabicNumerals[c - '0']);
-                } else {
-                    result.append(c);
-                }
-            }
-            return result.toString();
         }
     }
 }

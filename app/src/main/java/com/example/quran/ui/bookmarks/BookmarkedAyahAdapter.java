@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
+import com.example.quran.utils.ArabicNumeralConverter;
+import com.example.quran.utils.AyahTextFormatter;
+import com.example.quran.utils.AyahViewHelper;
 import com.example.quran.utils.BookmarkManager;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
-import com.example.quran.utils.TajweedHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,35 +118,14 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
                 }
             });
 
-            // Convert ayah number to Arabic numerals
-            String ayahNumber = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
-
-            // Concatenate ayah text with number in Quranic ornamental brackets
-            String ayahTextWithNumber = ayah.getTextArabic() + " ﴿" + ayahNumber + "﴾";
-
-            if (settingsManager.isTajweedEnabled()) {
-                CharSequence styledText = TajweedHelper.applyTajweed(
-                    ayahTextWithNumber,
-                    context.getColor(R.color.tajweed_ghunnah),
-                    context.getColor(R.color.tajweed_iqlaab),
-                    context.getColor(R.color.tajweed_ikhfaa),
-                    context.getColor(R.color.tajweed_qalqalah),
-                    context.getColor(R.color.tajweed_madd),
-                    context.getColor(R.color.tajweed_heavy),
-                    context.getColor(R.color.tajweed_laam_allah)
-                );
-                tvAyahArabic.setText(styledText);
-            } else {
-                tvAyahArabic.setText(ayahTextWithNumber);
-            }
+            // Format and style ayah text with number and Tajweed
+            CharSequence formattedText = AyahTextFormatter.formatAndStyleAyah(
+                ayah.getTextArabic(), ayah.getAyahNumber(), context, settingsManager);
+            tvAyahArabic.setText(formattedText);
             tvAyahTranslation.setText(ayah.getTextTranslation());
 
             // Show Bismillah for first ayah of all surahs except Surah 1 and 9
-            if (ayah.getAyahNumber() == 1 && ayah.getSurahNumber() != 1 && ayah.getSurahNumber() != 9) {
-                tvBismillah.setVisibility(View.VISIBLE);
-            } else {
-                tvBismillah.setVisibility(View.GONE);
-            }
+            AyahViewHelper.setBismillahVisibility(tvBismillah, ayah);
 
             // Set Ayah address (only surah name, ayah number is shown in the ayah text)
             boolean isArabic = settingsManager.isArabicLanguage();
@@ -167,17 +148,13 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
             // Show only surah name
             tvAyahAddress.setText(surahName);
 
-            // Apply font size
-            tvAyahArabic.setTextSize(24 * fontSizeMultiplier);
-            tvAyahTranslation.setTextSize(16 * fontSizeMultiplier);
-            tvBismillah.setTextSize(24 * fontSizeMultiplier);
+            // Apply font sizes
+            AyahViewHelper.applyFontSizes(fontSizeMultiplier,
+                tvAyahArabic, tvAyahTranslation, tvBismillah);
             // tvAyahAddress font size is set above based on language
 
             // Apply Uthman Taha Naskh font to Arabic text
-            if (arabicTypeface != null) {
-                tvAyahArabic.setTypeface(arabicTypeface);
-                tvBismillah.setTypeface(arabicTypeface);
-            }
+            AyahViewHelper.applyArabicTypeface(arabicTypeface, tvAyahArabic, tvBismillah);
 
             // Set bookmark icon (always filled since these are bookmarked ayahs)
             updateBookmarkIcon(ayah.getSurahNumber(), ayah.getAyahNumber());
@@ -196,24 +173,7 @@ public class BookmarkedAyahAdapter extends RecyclerView.Adapter<BookmarkedAyahAd
 
         private void updateBookmarkIcon(int surahNumber, int ayahNumber) {
             boolean isBookmarked = bookmarkManager.isBookmarked(surahNumber, ayahNumber);
-            if (isBookmarked) {
-                ivBookmark.setImageResource(R.drawable.ic_bookmark_filled);
-            } else {
-                ivBookmark.setImageResource(R.drawable.ic_bookmark_outline);
-            }
-        }
-
-        private String convertToArabicNumerals(String number) {
-            char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
-            StringBuilder result = new StringBuilder();
-            for (char c : number.toCharArray()) {
-                if (Character.isDigit(c)) {
-                    result.append(arabicNumerals[c - '0']);
-                } else {
-                    result.append(c);
-                }
-            }
-            return result.toString();
+            AyahViewHelper.updateBookmarkIcon(ivBookmark, isBookmarked);
         }
     }
 }

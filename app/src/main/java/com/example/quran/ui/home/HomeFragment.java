@@ -13,10 +13,11 @@ import androidx.navigation.Navigation;
 import com.example.quran.R;
 import com.example.quran.data.repository.QuranRepository;
 import com.example.quran.ui.base.BaseFragment;
+import com.example.quran.utils.ArabicNumeralConverter;
+import com.example.quran.utils.AyahTextFormatter;
 import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
-import com.example.quran.utils.TajweedHelper;
 import com.example.quran.utils.ViewModelFactory;
 
 /**
@@ -81,21 +82,10 @@ public class HomeFragment extends BaseFragment {
         // Observe random Ayah and display it
         viewModel.getRandomAyah().observe(getViewLifecycleOwner(), ayah -> {
             if (ayah != null) {
-                if (settingsManager.isTajweedEnabled()) {
-                    CharSequence styledText = TajweedHelper.applyTajweed(
-                        ayah.getTextArabic(),
-                        requireContext().getColor(R.color.tajweed_ghunnah),
-                        requireContext().getColor(R.color.tajweed_iqlaab),
-                        requireContext().getColor(R.color.tajweed_ikhfaa),
-                        requireContext().getColor(R.color.tajweed_qalqalah),
-                        requireContext().getColor(R.color.tajweed_madd),
-                        requireContext().getColor(R.color.tajweed_heavy),
-                        requireContext().getColor(R.color.tajweed_laam_allah)
-                    );
-                    tvRandomAyahArabic.setText(styledText);
-                } else {
-                    tvRandomAyahArabic.setText(ayah.getTextArabic());
-                }
+                // Apply Tajweed styling if enabled
+                CharSequence styledText = AyahTextFormatter.applyTajweedIfEnabled(
+                    ayah.getTextArabic(), requireContext(), settingsManager);
+                tvRandomAyahArabic.setText(styledText);
 
                 // Get Surah information to display Surah name
                 viewModel.getSurahByNumber(ayah.getSurahNumber()).observe(getViewLifecycleOwner(), surah -> {
@@ -108,7 +98,7 @@ public class HomeFragment extends BaseFragment {
                         if (isArabic) {
                             // Use custom calligraphy font for Arabic surah names
                             surahName = SurahFontHelper.getCharacter(surah.getNumber());
-                            ayahNumberDisplay = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
+                            ayahNumberDisplay = ArabicNumeralConverter.convert(ayah.getAyahNumber());
                             tvAyahInfo.setTypeface(SurahFontHelper.getTypeface(requireContext()));
                             tvAyahInfo.setTextSize(14 * settingsManager.getFontSizeMultiplier() * 1.5f);
                         } else {
@@ -124,18 +114,5 @@ public class HomeFragment extends BaseFragment {
                 });
             }
         });
-    }
-
-    private String convertToArabicNumerals(String number) {
-        char[] arabicNumerals = {'٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'};
-        StringBuilder result = new StringBuilder();
-        for (char c : number.toCharArray()) {
-            if (Character.isDigit(c)) {
-                result.append(arabicNumerals[c - '0']);
-            } else {
-                result.append(c);
-            }
-        }
-        return result.toString();
     }
 }

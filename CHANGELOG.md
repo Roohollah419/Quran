@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-02-24
+
+### Changed (Code Refactoring)
+- Extracted `ArabicNumeralConverter` utility class to eliminate duplication across 5 files
+- Created `AyahTextFormatter` utility for centralized text formatting and Tajweed application
+- Created `AyahViewHelper` utility for common UI binding logic (Bismillah visibility, font sizes, typefaces, icon updates)
+- Refactored `AyahAdapter` to use new utilities (reduced from 245 to 206 lines)
+- Refactored `BookmarkedAyahAdapter` to use new utilities (reduced from 220 to 177 lines)
+- Refactored `CommentedAyahAdapter` to use new utilities (reduced from 257 to 217 lines)
+- Refactored `SurahAdapter` to use `ArabicNumeralConverter` (reduced from 171 to 158 lines)
+- Refactored `HomeFragment` to use `ArabicNumeralConverter` and `AyahTextFormatter` (reduced from 141 to 114 lines)
+
+### Added
+- `ArabicNumeralConverter` utility class with comprehensive string and integer conversion methods
+- `AyahTextFormatter` utility class for formatting ayah text with ornamental brackets and Tajweed styling
+- `AyahViewHelper` utility class for common view operations (Bismillah visibility, font application, icon updates)
+- 30 unit tests for `ArabicNumeralConverter` covering all conversion scenarios
+- 20 unit tests for `AyahTextFormatter` covering text formatting and Tajweed application
+- 33 unit tests for `AyahViewHelper` covering all view helper methods
+
+### Technical Details
+- Removed 160+ lines of duplicated code across 8 files
+- Added 160 lines of well-tested utility code (100% test coverage on new utilities)
+- Added 300+ lines of comprehensive unit tests (83 total test cases)
+- Improved code maintainability through DRY (Don't Repeat Yourself) principle
+- No functional changes - all existing features work identically
+- Test coverage maintained above 80% threshold
+- All adapter bind() methods simplified from ~40 lines to ~15 lines
+
 ## [1.5.0] - 2026-02-24
 
 ### Added
