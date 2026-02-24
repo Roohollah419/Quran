@@ -130,8 +130,8 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
             // Convert ayah number to Arabic numerals
             String ayahNumber = convertToArabicNumerals(String.valueOf(ayah.getAyahNumber()));
 
-            // Concatenate ayah text with number in parentheses
-            String ayahTextWithNumber = ayah.getTextArabic() + " (" + ayahNumber + ")";
+            // Concatenate ayah text with number in Quranic ornamental brackets
+            String ayahTextWithNumber = ayah.getTextArabic() + " ﴿" + ayahNumber + "﴾";
 
             if (settingsManager.isTajweedEnabled()) {
                 CharSequence styledText = TajweedHelper.applyTajweed(
