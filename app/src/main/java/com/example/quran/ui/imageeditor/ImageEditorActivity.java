@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -23,11 +24,13 @@ import com.example.quran.utils.ImageOverlayHelper;
 
 /**
  * Activity for previewing and positioning text overlay on background image.
- * Users can drag the text to position it before saving and sharing.
+ * Users can drag, resize, and rotate the text overlay before saving and sharing.
  */
 public class ImageEditorActivity extends AppCompatActivity {
 
     private static final String TAG = "ImageEditorActivity";
+    private static final float MIN_SCALE = 0.5f;
+    private static final float MAX_SCALE = 3.0f;
 
     // Intent extras
     public static final String EXTRA_IMAGE_URI = "image_uri";
@@ -48,9 +51,18 @@ public class ImageEditorActivity extends AppCompatActivity {
     private String arabicText;
     private String surahInfo;
 
-    // Touch handling
+    // Touch handling for drag
     private float dX, dY;
     private float lastTouchX, lastTouchY;
+
+    // Scale and rotation handling
+    private ScaleGestureDetector scaleGestureDetector;
+    private float scaleFactor = 1.0f;
+    private float rotation = 0f;
+
+    // For rotation gesture detection
+    private float lastRotation = 0f;
+    private boolean isRotating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +128,30 @@ public class ImageEditorActivity extends AppCompatActivity {
         tvArabicPreview.setText(arabicText);
         tvSurahInfoPreview.setText(surahInfo);
 
-        // Setup touch listener for dragging
+        // Initialize scale gesture detector
+        scaleGestureDetector = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                scaleFactor *= detector.getScaleFactor();
+                scaleFactor = Math.max(MIN_SCALE, Math.min(scaleFactor, MAX_SCALE));
+
+                // Apply scale
+                flTextOverlay.setScaleX(scaleFactor);
+                flTextOverlay.setScaleY(scaleFactor);
+                return true;
+            }
+        });
+
+        // Setup touch listener for drag, scale, and rotation
         flTextOverlay.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
+                // Handle scale gesture
+                scaleGestureDetector.onTouchEvent(event);
+
+                int action = event.getActionMasked();
+
+                switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         dX = view.getX() - event.getRawX();
                         dY = view.getY() - event.getRawY();
@@ -128,20 +159,53 @@ public class ImageEditorActivity extends AppCompatActivity {
                         lastTouchY = event.getRawY();
                         return true;
 
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        // Two fingers down - check for rotation
+                        if (event.getPointerCount() == 2) {
+                            isRotating = true;
+                            lastRotation = getRotationBetweenFingers(event);
+                        }
+                        return true;
+
                     case MotionEvent.ACTION_MOVE:
-                        float newX = event.getRawX() + dX;
-                        float newY = event.getRawY() + dY;
+                        if (event.getPointerCount() == 2 && isRotating) {
+                            // Handle rotation with two fingers
+                            float newRotation = getRotationBetweenFingers(event);
+                            float rotationDelta = newRotation - lastRotation;
 
-                        // Keep within bounds
-                        View parent = (View) view.getParent();
-                        newX = Math.max(0, Math.min(newX, parent.getWidth() - view.getWidth()));
-                        newY = Math.max(0, Math.min(newY, parent.getHeight() - view.getHeight()));
+                            // Normalize rotation delta to -180 to 180 range
+                            if (rotationDelta > 180) {
+                                rotationDelta -= 360;
+                            } else if (rotationDelta < -180) {
+                                rotationDelta += 360;
+                            }
 
-                        view.setX(newX);
-                        view.setY(newY);
+                            rotation += rotationDelta;
+                            lastRotation = newRotation;
+
+                            // Apply rotation
+                            view.setRotation(rotation);
+                        } else if (event.getPointerCount() == 1 && !scaleGestureDetector.isInProgress()) {
+                            // Handle drag with single finger
+                            float newX = event.getRawX() + dX;
+                            float newY = event.getRawY() + dY;
+
+                            // Keep within bounds (loose bounds to account for rotation)
+                            View parent = (View) view.getParent();
+                            newX = Math.max(-view.getWidth(), Math.min(newX, parent.getWidth()));
+                            newY = Math.max(-view.getHeight(), Math.min(newY, parent.getHeight()));
+
+                            view.setX(newX);
+                            view.setY(newY);
+                        }
+                        return true;
+
+                    case MotionEvent.ACTION_POINTER_UP:
+                        isRotating = false;
                         return true;
 
                     case MotionEvent.ACTION_UP:
+                        isRotating = false;
                         return true;
 
                     default:
@@ -149,6 +213,19 @@ public class ImageEditorActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Calculate rotation angle between two touch points.
+     */
+    private float getRotationBetweenFingers(MotionEvent event) {
+        if (event.getPointerCount() < 2) {
+            return 0;
+        }
+
+        float deltaX = event.getX(1) - event.getX(0);
+        float deltaY = event.getY(1) - event.getY(0);
+        return (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
     }
 
     private void saveAndShareImage() {
@@ -162,7 +239,7 @@ public class ImageEditorActivity extends AppCompatActivity {
         btnSaveAndShare.setEnabled(false);
 
         // Generate image in background
-        new GenerateImageTask(textX, textY).execute();
+        new GenerateImageTask(textX, textY, scaleFactor, rotation).execute();
     }
 
     /**
@@ -172,10 +249,14 @@ public class ImageEditorActivity extends AppCompatActivity {
 
         private final float textX;
         private final float textY;
+        private final float scale;
+        private final float rotation;
 
-        public GenerateImageTask(float textX, float textY) {
+        public GenerateImageTask(float textX, float textY, float scale, float rotation) {
             this.textX = textX;
             this.textY = textY;
+            this.scale = scale;
+            this.rotation = rotation;
         }
 
         @Override
@@ -189,7 +270,9 @@ public class ImageEditorActivity extends AppCompatActivity {
                         surahInfo,
                         textX,
                         textY,
-                        24 // Text size in DP
+                        24, // Text size in DP
+                        scale,
+                        rotation
                 );
 
                 if (resultBitmap == null) {

@@ -50,6 +50,8 @@ public class ImageOverlayHelper {
      * @param textX X position (0-1 relative to image width)
      * @param textY Y position (0-1 relative to image height)
      * @param textSizeDp Text size in DP
+     * @param scale Scale factor for text size (1.0 = normal)
+     * @param rotation Rotation angle in degrees
      * @return Bitmap of the final image with overlay, or null on error
      */
     public static Bitmap createOverlayImage(
@@ -59,7 +61,9 @@ public class ImageOverlayHelper {
             String surahInfo,
             float textX,
             float textY,
-            int textSizeDp
+            int textSizeDp,
+            float scale,
+            float rotation
     ) {
         try {
             // Load and scale background image
@@ -76,9 +80,9 @@ public class ImageOverlayHelper {
             // Load Arabic font
             Typeface arabicFont = loadArabicFont(context);
 
-            // Calculate text size in pixels
+            // Calculate text size in pixels with scale factor
             float density = context.getResources().getDisplayMetrics().density;
-            int textSizePx = (int) (textSizeDp * density);
+            int textSizePx = (int) (textSizeDp * density * scale);
 
             // Create text paints
             TextPaint arabicPaint = createTextPaint(arabicFont, TEXT_COLOR, textSizePx);
@@ -94,17 +98,24 @@ public class ImageOverlayHelper {
             StaticLayout infoLayout = createStaticLayout(surahInfo, infoPaint, maxTextWidth);
 
             // Calculate total text box dimensions
-            float textBoxPadding = TEXT_BOX_PADDING_DP * density;
+            float textBoxPadding = TEXT_BOX_PADDING_DP * density * scale;
             float totalTextHeight = arabicLayout.getHeight() + infoLayout.getHeight() + (textBoxPadding / 2);
             float totalTextWidth = Math.max(arabicLayout.getWidth(), infoLayout.getWidth());
 
-            // Calculate text box position
-            float boxX = (textX * mutableBitmap.getWidth()) - (totalTextWidth / 2);
-            float boxY = (textY * mutableBitmap.getHeight()) - (totalTextHeight / 2);
+            // Calculate text box center position
+            float centerX = textX * mutableBitmap.getWidth();
+            float centerY = textY * mutableBitmap.getHeight();
 
-            // Constrain box to image bounds
-            boxX = Math.max(0, Math.min(boxX, mutableBitmap.getWidth() - totalTextWidth - textBoxPadding * 2));
-            boxY = Math.max(0, Math.min(boxY, mutableBitmap.getHeight() - totalTextHeight - textBoxPadding * 2));
+            // Save canvas state for rotation
+            canvas.save();
+
+            // Translate to center position and rotate
+            canvas.translate(centerX, centerY);
+            canvas.rotate(rotation);
+
+            // Calculate box position relative to center (now at 0,0 after translation)
+            float boxX = -(totalTextWidth / 2) - textBoxPadding;
+            float boxY = -(totalTextHeight / 2) - textBoxPadding;
 
             // Create background box rect
             RectF backgroundBox = new RectF(
@@ -137,6 +148,9 @@ public class ImageOverlayHelper {
                     boxY + textBoxPadding + arabicLayout.getHeight() + (textBoxPadding / 2)
             );
             infoLayout.draw(canvas);
+            canvas.restore();
+
+            // Restore canvas state (undo rotation and translation)
             canvas.restore();
 
             return mutableBitmap;

@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.1] - 2026-02-24
 
+### Added
+- Resize text overlay using pinch-to-zoom gesture in image editor
+- Rotate text overlay using two-finger rotation gesture in image editor
+- Scale factor support (0.5x to 3.0x) for flexible text sizing
+- Updated help text with gesture instructions: "Drag • Pinch to resize • Two fingers to rotate"
+
+### Changed
+- ImageView scaleType changed from `centerCrop` to `fitCenter` for accurate orientation display
+- Text overlay now supports multi-touch gestures (drag, scale, rotate) simultaneously
+- Scale and rotation parameters now applied to final saved image matching preview exactly
+
 ### Fixed
 - Image preview orientation in edit mode now correctly displays landscape images
 - ImageEditorActivity now uses EXIF-aware image loading to match final output orientation
 - Preview and final saved image now show consistent orientation for all image types
+- Text overlay transformations (scale, rotation) properly applied during image generation
 
 ## [1.4.0] - 2026-02-23
 
