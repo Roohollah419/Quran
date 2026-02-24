@@ -10,7 +10,7 @@
         android:id="@+id/ivBackgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/create_image" />
 
     <!-- Draggable Text Overlay Container -->

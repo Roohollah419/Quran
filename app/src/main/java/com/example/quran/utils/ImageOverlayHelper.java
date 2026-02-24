@@ -148,6 +148,18 @@ public class ImageOverlayHelper {
     }
 
     /**
+     * Load image from URI with proper EXIF orientation handling.
+     * Public method for use in preview/edit screens.
+     *
+     * @param context Android context
+     * @param imageUri URI of the image to load
+     * @return Bitmap with correct orientation, or null on error
+     */
+    public static Bitmap loadImageWithOrientation(Context context, Uri imageUri) {
+        return loadAndScaleImage(context, imageUri);
+    }
+
+    /**
      * Load and scale image from URI if it's too large.
      * Properly handles EXIF orientation to ensure image is correctly rotated.
      */

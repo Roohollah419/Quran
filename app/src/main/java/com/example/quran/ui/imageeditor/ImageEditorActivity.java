@@ -97,7 +97,13 @@ public class ImageEditorActivity extends AppCompatActivity {
 
     private void loadBackgroundImage() {
         try {
-            ivBackgroundImage.setImageURI(imageUri);
+            // Load image with proper EXIF orientation handling
+            Bitmap bitmap = ImageOverlayHelper.loadImageWithOrientation(this, imageUri);
+            if (bitmap != null) {
+                ivBackgroundImage.setImageBitmap(bitmap);
+            } else {
+                throw new Exception("Failed to decode image");
+            }
         } catch (Exception e) {
             Log.e(TAG, "Error loading background image", e);
             Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
