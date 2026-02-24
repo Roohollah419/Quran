@@ -26,4 +26,13 @@
     <!-- Comment Colors (Dark Theme) -->
     <color name="comment_background">#2C2C2C</color>
     <color name="comment_border">#404040</color>
+
+    <!-- Tajweed Colors (Traditional Mushaf al-Tajweed) -->
+    <color name="tajweed_ghunnah">#2E7D32</color>          <!-- Dark Green -->
+    <color name="tajweed_iqlaab">#9C27B0</color>           <!-- Purple -->
+    <color name="tajweed_ikhfaa">#FF6F00</color>           <!-- Orange -->
+    <color name="tajweed_qalqalah">#2E7D32</color>         <!-- Dark Green -->
+    <color name="tajweed_madd">#D32F2F</color>             <!-- Red -->
+    <color name="tajweed_heavy">#1976D2</color>            <!-- Blue -->
+    <color name="tajweed_laam_allah">#FFA000</color>       <!-- Golden -->
 </resources>

@@ -140,6 +140,39 @@
         app:layout_constraintStart_toEndOf="@id/btnFontLarge"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Tajweed Highlighting Section -->
+    <TextView
+        android:id="@+id/tvTajweedLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/tajweed_highlighting"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/padding_large"
+        app:layout_constraintTop_toBottomOf="@id/btnFontSmall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btnTajweedOn"
+        style="@style/SettingsOptionButton"
+        android:text="@string/tajweed_on"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvTajweedLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnTajweedOff"/>
+
+    <Button
+        android:id="@+id/btnTajweedOff"
+        style="@style/SettingsOptionButton"
+        android:text="@string/tajweed_off"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        app:layout_constraintTop_toBottomOf="@id/tvTajweedLabel"
+        app:layout_constraintStart_toEndOf="@id/btnTajweedOn"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Version and GitHub Link -->
     <LinearLayout
         android:id="@+id/layoutVersionGithub"

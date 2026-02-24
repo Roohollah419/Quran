@@ -31,6 +31,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private Button btnThemeLight, btnThemeDark;
     private Button btnLanguageEnglish, btnLanguageArabic;
     private Button btnFontSmall, btnFontMedium, btnFontLarge, btnFontXLarge;
+    private Button btnTajweedOn, btnTajweedOff;
     private TextView tvVersion;
     private LinearLayout layoutGithub;
 
@@ -79,6 +80,8 @@ public class SettingsDialogFragment extends DialogFragment {
         btnFontMedium = view.findViewById(R.id.btnFontMedium);
         btnFontLarge = view.findViewById(R.id.btnFontLarge);
         btnFontXLarge = view.findViewById(R.id.btnFontXLarge);
+        btnTajweedOn = view.findViewById(R.id.btnTajweedOn);
+        btnTajweedOff = view.findViewById(R.id.btnTajweedOff);
         tvVersion = view.findViewById(R.id.tvVersion);
         layoutGithub = view.findViewById(R.id.layoutGithub);
 
@@ -138,6 +141,13 @@ public class SettingsDialogFragment extends DialogFragment {
 
         // Load font size
         selectFontSizeButton(settingsManager.getFontSize());
+
+        // Load Tajweed setting
+        if (settingsManager.isTajweedEnabled()) {
+            selectTajweedButton(btnTajweedOn);
+        } else {
+            selectTajweedButton(btnTajweedOff);
+        }
     }
 
     private void setupListeners() {
@@ -180,6 +190,16 @@ public class SettingsDialogFragment extends DialogFragment {
             selectFontSizeButton(3);
             applyFontSizeChange(3);
         });
+
+        // Tajweed button listeners - apply immediately
+        btnTajweedOn.setOnClickListener(v -> {
+            selectTajweedButton(btnTajweedOn);
+            applyTajweedChange(true);
+        });
+        btnTajweedOff.setOnClickListener(v -> {
+            selectTajweedButton(btnTajweedOff);
+            applyTajweedChange(false);
+        });
     }
 
     private void applyThemeChange(boolean isDarkTheme) {
@@ -213,6 +233,13 @@ public class SettingsDialogFragment extends DialogFragment {
         }
     }
 
+    private void applyTajweedChange(boolean enabled) {
+        settingsManager.setTajweed(enabled);
+        if (settingsChangedListener != null) {
+            settingsChangedListener.onSettingsChanged();
+        }
+    }
+
     private void selectThemeButton(Button selectedButton) {
         btnThemeLight.setSelected(selectedButton == btnThemeLight);
         btnThemeDark.setSelected(selectedButton == btnThemeDark);
@@ -228,6 +255,11 @@ public class SettingsDialogFragment extends DialogFragment {
         btnFontMedium.setSelected(fontSize == 1);
         btnFontLarge.setSelected(fontSize == 2);
         btnFontXLarge.setSelected(fontSize == 3);
+    }
+
+    private void selectTajweedButton(Button selectedButton) {
+        btnTajweedOn.setSelected(selectedButton == btnTajweedOn);
+        btnTajweedOff.setSelected(selectedButton == btnTajweedOff);
     }
 
     private void setVersionText() {

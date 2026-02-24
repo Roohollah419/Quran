@@ -18,6 +18,7 @@ import com.example.quran.data.model.Ayah;
 import com.example.quran.utils.CommentManager;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
+import com.example.quran.utils.TajweedHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,7 +132,22 @@ public class CommentedAyahAdapter extends RecyclerView.Adapter<CommentedAyahAdap
 
             // Concatenate ayah text with number in parentheses
             String ayahTextWithNumber = ayah.getTextArabic() + " (" + ayahNumber + ")";
-            tvAyahArabic.setText(ayahTextWithNumber);
+
+            if (settingsManager.isTajweedEnabled()) {
+                CharSequence styledText = TajweedHelper.applyTajweed(
+                    ayahTextWithNumber,
+                    context.getColor(R.color.tajweed_ghunnah),
+                    context.getColor(R.color.tajweed_iqlaab),
+                    context.getColor(R.color.tajweed_ikhfaa),
+                    context.getColor(R.color.tajweed_qalqalah),
+                    context.getColor(R.color.tajweed_madd),
+                    context.getColor(R.color.tajweed_heavy),
+                    context.getColor(R.color.tajweed_laam_allah)
+                );
+                tvAyahArabic.setText(styledText);
+            } else {
+                tvAyahArabic.setText(ayahTextWithNumber);
+            }
             tvAyahTranslation.setText(ayah.getTextTranslation());
 
             // Show Bismillah for first ayah of all surahs except Surah 1 and 9

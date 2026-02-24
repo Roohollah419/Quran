@@ -26,6 +26,9 @@
     <string name="font_size_medium">M</string>
     <string name="font_size_large">L</string>
     <string name="font_size_extra_large">XL</string>
+    <string name="tajweed_highlighting">Tajweed Highlighting</string>
+    <string name="tajweed_on">On</string>
+    <string name="tajweed_off">Off</string>
     <string name="version">Version</string>
     <string name="version_format">Version %s</string>
 

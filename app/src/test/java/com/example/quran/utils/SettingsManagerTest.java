@@ -31,12 +31,14 @@ public class SettingsManagerTest {
         when(mockPreferences.edit()).thenReturn(mockEditor);
         when(mockEditor.putString(anyString(), anyString())).thenReturn(mockEditor);
         when(mockEditor.putInt(anyString(), anyInt())).thenReturn(mockEditor);
+        when(mockEditor.putBoolean(anyString(), anyBoolean())).thenReturn(mockEditor);
         doNothing().when(mockEditor).apply();
 
         // Set default values
         when(mockPreferences.getString(eq("language"), anyString())).thenReturn(SettingsManager.LANGUAGE_ARABIC);
         when(mockPreferences.getString(eq("theme"), anyString())).thenReturn(SettingsManager.THEME_LIGHT);
         when(mockPreferences.getInt(eq("font_size"), anyInt())).thenReturn(SettingsManager.FONT_SIZE_MEDIUM);
+        when(mockPreferences.getBoolean(eq("tajweed_enabled"), anyBoolean())).thenReturn(true);
 
         settingsManager = new SettingsManager(mockContext);
     }
@@ -121,5 +123,45 @@ public class SettingsManagerTest {
         assertEquals("Medium", SettingsManager.getFontSizeLabel(SettingsManager.FONT_SIZE_MEDIUM));
         assertEquals("Large", SettingsManager.getFontSizeLabel(SettingsManager.FONT_SIZE_LARGE));
         assertEquals("Extra Large", SettingsManager.getFontSizeLabel(SettingsManager.FONT_SIZE_EXTRA_LARGE));
+    }
+
+    // Tajweed tests
+    @Test
+    public void testDefaultTajweedEnabled() {
+        // Default should be true (ON)
+        boolean tajweedEnabled = settingsManager.getTajweed();
+        assertTrue(tajweedEnabled);
+    }
+
+    @Test
+    public void testGetTajweedReturnsTrue() {
+        // When enabled
+        when(mockPreferences.getBoolean(eq("tajweed_enabled"), anyBoolean())).thenReturn(true);
+        assertTrue(settingsManager.getTajweed());
+    }
+
+    @Test
+    public void testGetTajweedReturnsFalse() {
+        // When disabled
+        when(mockPreferences.getBoolean(eq("tajweed_enabled"), anyBoolean())).thenReturn(false);
+        assertFalse(settingsManager.getTajweed());
+    }
+
+    @Test
+    public void testSetTajweedCallsEditor() {
+        // Verify that setting Tajweed persists to SharedPreferences
+        settingsManager.setTajweed(true);
+        verify(mockEditor).putBoolean("tajweed_enabled", true);
+        verify(mockEditor).apply();
+    }
+
+    @Test
+    public void testIsTajweedEnabledMatchesGetTajweed() {
+        // isTajweedEnabled() should be consistent with getTajweed()
+        when(mockPreferences.getBoolean(eq("tajweed_enabled"), anyBoolean())).thenReturn(true);
+        assertEquals(settingsManager.getTajweed(), settingsManager.isTajweedEnabled());
+
+        when(mockPreferences.getBoolean(eq("tajweed_enabled"), anyBoolean())).thenReturn(false);
+        assertEquals(settingsManager.getTajweed(), settingsManager.isTajweedEnabled());
     }
 }

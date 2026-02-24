@@ -16,6 +16,7 @@ import com.example.quran.ui.base.BaseFragment;
 import com.example.quran.utils.Constants;
 import com.example.quran.utils.SettingsManager;
 import com.example.quran.utils.SurahFontHelper;
+import com.example.quran.utils.TajweedHelper;
 import com.example.quran.utils.ViewModelFactory;
 
 /**
@@ -80,7 +81,21 @@ public class HomeFragment extends BaseFragment {
         // Observe random Ayah and display it
         viewModel.getRandomAyah().observe(getViewLifecycleOwner(), ayah -> {
             if (ayah != null) {
-                tvRandomAyahArabic.setText(ayah.getTextArabic());
+                if (settingsManager.isTajweedEnabled()) {
+                    CharSequence styledText = TajweedHelper.applyTajweed(
+                        ayah.getTextArabic(),
+                        requireContext().getColor(R.color.tajweed_ghunnah),
+                        requireContext().getColor(R.color.tajweed_iqlaab),
+                        requireContext().getColor(R.color.tajweed_ikhfaa),
+                        requireContext().getColor(R.color.tajweed_qalqalah),
+                        requireContext().getColor(R.color.tajweed_madd),
+                        requireContext().getColor(R.color.tajweed_heavy),
+                        requireContext().getColor(R.color.tajweed_laam_allah)
+                    );
+                    tvRandomAyahArabic.setText(styledText);
+                } else {
+                    tvRandomAyahArabic.setText(ayah.getTextArabic());
+                }
 
                 // Get Surah information to display Surah name
                 viewModel.getSurahByNumber(ayah.getSurahNumber()).observe(getViewLifecycleOwner(), surah -> {

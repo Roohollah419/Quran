@@ -12,6 +12,7 @@ public class SettingsManager {
     private static final String KEY_THEME = "theme";
     private static final String KEY_FONT_SIZE = "font_size";
     private static final String KEY_LANGUAGE = "language";
+    private static final String KEY_TAJWEED = "tajweed_enabled";
 
     // Theme constants
     public static final String THEME_LIGHT = "light";
@@ -130,5 +131,28 @@ public class SettingsManager {
      */
     public boolean isArabicLanguage() {
         return LANGUAGE_ARABIC.equals(getLanguage());
+    }
+
+    /**
+     * Get Tajweed highlighting setting.
+     * @return true if Tajweed highlighting is enabled
+     */
+    public boolean getTajweed() {
+        return preferences.getBoolean(KEY_TAJWEED, true); // Default: ON
+    }
+
+    /**
+     * Set Tajweed highlighting preference.
+     * @param enabled true to enable Tajweed highlighting
+     */
+    public void setTajweed(boolean enabled) {
+        preferences.edit().putBoolean(KEY_TAJWEED, enabled).apply();
+    }
+
+    /**
+     * Check if Tajweed highlighting is enabled.
+     */
+    public boolean isTajweedEnabled() {
+        return getTajweed();
     }
 }

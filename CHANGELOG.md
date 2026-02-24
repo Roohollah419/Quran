@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-24
+
+### Added
+- Tajweed highlighting feature with traditional Mushaf al-Tajweed color scheme
+- TajweedHelper utility class for detecting 7 Tajweed recitation rules
+- Tajweed Highlighting toggle in settings (ON by default for new users)
+- Support for Noon Sakinah rules: Iqlaab (purple) and Ikhfaa (orange)
+- Support for Meem Sakinah rules: Idghaam Shafawi (dark green) and Ikhfaa Shafawi (orange)
+- Qalqalah highlighting for ق ط ب ج د with Sukun (dark green)
+- Madd (prolongation) highlighting for vowel letters (red)
+- Heavy letter highlighting for ص ض ط ظ خ غ ق (blue)
+- Lam in Allah's name highlighting (golden)
+- Comprehensive unit tests for TajweedHelper (20 test cases covering all rules and edge cases)
+
+### Changed
+- Arabic text in AyahAdapter applies Tajweed colors when enabled
+- Arabic text in BookmarkedAyahAdapter applies Tajweed colors when enabled
+- Arabic text in CommentedAyahAdapter applies Tajweed colors when enabled
+- Arabic text in HomeFragment random ayah applies Tajweed colors when enabled
+- SettingsDialogFragment extended with Tajweed Highlighting section (On/Off toggle)
+- SettingsManager extended with Tajweed toggle methods (getTajweed, setTajweed, isTajweedEnabled)
+
+### Technical Details
+- Character-by-character Unicode analysis with diacritic-aware parsing
+- ForegroundColorSpan for colored text rendering via SpannableString
+- Rule detection follows traditional Tajweed recitation standards
+- Performance optimized with lazy evaluation during view binding
+- Test coverage maintained at 80%+ with new TajweedHelper tests
+- Color resources added for 7 Tajweed colors (consistent across light and dark themes)
+- String resources added for Tajweed settings (tajweed_highlighting, tajweed_on, tajweed_off)
+
 ## [1.4.1] - 2026-02-24
 
 ### Added
