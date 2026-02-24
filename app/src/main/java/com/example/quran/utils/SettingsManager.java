@@ -138,7 +138,7 @@ public class SettingsManager {
      * @return true if Tajweed highlighting is enabled
      */
     public boolean getTajweed() {
-        return preferences.getBoolean(KEY_TAJWEED, true); // Default: ON
+        return preferences.getBoolean(KEY_TAJWEED, false); // Default: OFF
     }
 
     /**

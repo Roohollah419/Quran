@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.1] - 2026-02-24
 
-### Changed (Code Refactoring)
+### Changed
+- **Tajweed highlighting default changed from ON to OFF** - Users can still enable it in settings
 - Extracted `ArabicNumeralConverter` utility class to eliminate duplication across 5 files
 - Created `AyahTextFormatter` utility for centralized text formatting and Tajweed application
 - Created `AyahViewHelper` utility for common UI binding logic (Bismillah visibility, font sizes, typefaces, icon updates)
