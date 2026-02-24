@@ -26,6 +26,7 @@ public class SurahListViewModel extends BaseViewModel {
     private final MediatorLiveData<List<Surah>> sortedSurahs;
     private final MutableLiveData<SortField> currentSortField;
     private final MutableLiveData<Boolean> isAscending;
+    private boolean isArabicLanguage = true; // Default to Arabic
 
     public SurahListViewModel(QuranRepository repository) {
         super(repository);
@@ -70,6 +71,19 @@ public class SurahListViewModel extends BaseViewModel {
         return isAscending;
     }
 
+    public void setLanguage(boolean isArabic) {
+        if (this.isArabicLanguage != isArabic) {
+            this.isArabicLanguage = isArabic;
+            // Re-sort if currently sorted by name
+            if (currentSortField.getValue() == SortField.NAME) {
+                List<Surah> current = allSurahs.getValue();
+                if (current != null) {
+                    sortedSurahs.setValue(sortSurahs(current));
+                }
+            }
+        }
+    }
+
     public void sortBy(SortField field) {
         SortField current = currentSortField.getValue();
         if (current == field) {
@@ -107,7 +121,12 @@ public class SurahListViewModel extends BaseViewModel {
     private Comparator<Surah> getComparator(SortField field) {
         switch (field) {
             case NAME:
-                return Comparator.comparing(Surah::getNameArabic);
+                // Use English or Arabic name based on language setting
+                if (isArabicLanguage) {
+                    return Comparator.comparing(Surah::getNameArabic);
+                } else {
+                    return Comparator.comparing(Surah::getNameEnglish);
+                }
             case AYAH_COUNT:
                 return Comparator.comparingInt(Surah::getTotalAyahs);
             case REVELATION_TYPE:

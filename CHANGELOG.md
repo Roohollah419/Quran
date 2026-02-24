@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-02-24
+
+### Changed
+- **Home screen ayah info display updated with Quranic ornamental brackets** - Replaced regular parentheses with ﴿﴾
+- **Surah list column order improved for better readability**
+  - English (LTR): No | Surah | Verses | Type
+  - Arabic (RTL): Type | Verses | Surah | No
+- **Arabic header text updated in surah list**
+  - Number column: "رقم" → "رقمها"
+  - Type column: "نوع" → "البیان"
+- **Column widths adjusted in surah list** - Number column increased, Type column decreased for better balance
+- **Home screen RTL support improved** - Ayah info now properly displays right-to-left in Arabic mode
+
+### Fixed
+- **Surah name sorting bug fixed** - Now correctly sorts by English names in English mode and Arabic names in Arabic mode
+- **Quranic ornamental bracket display fixed** - Brackets now display correctly as ﴾5﴿ in English mode with proper Unicode bidirectional formatting
+- **Font consistency in home screen** - Ornamental brackets and ayah numbers now use Uthman Taha font matching the main ayah text
+
+### Added
+- **Custom font support in home screen ayah info** - SpannableString implementation for mixed font display (Uthman Taha for brackets/numbers, calligraphy for surah names)
+- **Language-aware sorting in SurahListViewModel** - Added `setLanguage()` method to respect current language when sorting
+- **Dynamic layout direction for surah list** - Headers and items automatically adjust to LTR/RTL based on language
+
+### Technical Details
+- Updated `HomeFragment.java` with CustomTypefaceSpan for mixed font styling
+- Modified `SurahListViewModel.java` to use `getNameEnglish()` vs `getNameArabic()` based on language
+- Removed hardcoded `layoutDirection="ltr"` from `header_surah_list.xml` to enable dynamic direction
+- Applied Unicode bidirectional formatting characters (RLE, LRE, RLM) for proper bracket display
+- Column weights adjusted: No (0.6→0.9), Type (1.0→0.7) in both header and item layouts
+
 ## [1.5.1] - 2026-02-24
 
 ### Changed

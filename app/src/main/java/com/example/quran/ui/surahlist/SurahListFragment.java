@@ -62,6 +62,9 @@ public class SurahListFragment extends BaseFragment implements SurahAdapter.OnSu
         ViewModelFactory factory = new ViewModelFactory(repository);
         viewModel = new ViewModelProvider(this, factory).get(SurahListViewModel.class);
 
+        // Set language in ViewModel
+        viewModel.setLanguage(settingsManager.isArabicLanguage());
+
         // Update header based on language (after ViewModel is set)
         updateHeader();
 

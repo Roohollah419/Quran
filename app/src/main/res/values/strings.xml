@@ -38,9 +38,9 @@
     <string name="header_ayah_count">Verses</string>
     <string name="header_ayah_count_ar">آیاتها</string>
     <string name="header_surah_number">No.</string>
-    <string name="header_surah_number_ar">رقم</string>
+    <string name="header_surah_number_ar">رقمها</string>
     <string name="header_revelation_type">Type</string>
-    <string name="header_revelation_type_ar">نوع</string>
+    <string name="header_revelation_type_ar">البیان</string>
     <string name="meccan_ar">مكية</string>
     <string name="medinan_ar">مدنية</string>
 
