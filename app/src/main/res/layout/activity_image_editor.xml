@@ -75,13 +75,12 @@
         android:background="#80000000"
         android:padding="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveAndShare"
+            style="@style/AppButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_and_share"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/primary" />
+            android:text="@string/save_and_share" />
 
     </LinearLayout>
 
