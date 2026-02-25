@@ -86,15 +86,29 @@ public class SurahListFragment extends BaseFragment implements SurahAdapter.OnSu
         boolean isArabic = settingsManager.isArabicLanguage();
         Typeface arabicTypeface = ResourcesCompat.getFont(requireContext(), R.font.uthmantaha);
 
+        // Get the actual LinearLayout inside the included header
+        final View headerLayoutView = headerView.findViewById(R.id.headerLayout);
+        final View layoutToUpdate = (headerLayoutView != null) ? headerLayoutView : headerView;
+
         // Set layout direction based on language
+        int layoutDirection = isArabic ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR;
+
+        // Set layout direction on both the include wrapper and the actual LinearLayout
+        headerView.setLayoutDirection(layoutDirection);
+        layoutToUpdate.setLayoutDirection(layoutDirection);
+
+        // Force the views to relayout
+        headerView.post(() -> {
+            headerView.requestLayout();
+            layoutToUpdate.requestLayout();
+        });
+
         if (isArabic) {
-            headerView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             tvHeaderSurahName.setTypeface(arabicTypeface);
             tvHeaderAyahCount.setTypeface(arabicTypeface);
             tvHeaderSurahNumber.setTypeface(arabicTypeface);
             tvHeaderRevelationType.setTypeface(arabicTypeface);
         } else {
-            headerView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             tvHeaderSurahName.setTypeface(Typeface.DEFAULT_BOLD);
             tvHeaderAyahCount.setTypeface(Typeface.DEFAULT_BOLD);
             tvHeaderSurahNumber.setTypeface(Typeface.DEFAULT_BOLD);

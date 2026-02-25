@@ -33,8 +33,28 @@
             android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="12dp"
-            android:gravity="center_vertical"
-            android:layoutDirection="rtl">
+            android:gravity="center_vertical">
+
+            <!-- Surah Number -->
+            <TextView
+                android:id="@+id/tvSurahNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="1"
+                android:textSize="16sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textDirection="ltr"
+                android:gravity="center"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/textColorSecondary"
+                android:alpha="0.3"/>
 
             <!-- Surah Name -->
             <TextView
@@ -58,32 +78,13 @@
                 android:background="?android:attr/textColorSecondary"
                 android:alpha="0.3"/>
 
-            <!-- Surah Number -->
-            <TextView
-                android:id="@+id/tvSurahNumber"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:textSize="16sp"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textDirection="ltr"
-                android:gravity="center"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"/>
-
-            <!-- Divider -->
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="?android:attr/textColorSecondary"
-                android:alpha="0.3"/>
-
             <!-- Ayah Count -->
             <TextView
                 android:id="@+id/tvSurahInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
+                android:text="7"
                 android:textSize="16sp"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textDirection="ltr"
@@ -103,7 +104,7 @@
                 android:id="@+id/ivRevelationType"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:scaleType="centerInside"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"

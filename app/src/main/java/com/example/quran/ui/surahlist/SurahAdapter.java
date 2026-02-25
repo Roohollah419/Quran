@@ -100,11 +100,11 @@ public class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.SurahViewHol
             boolean isArabic = settingsManager.isArabicLanguage();
 
             // Set layout direction based on language
-            if (isArabic) {
-                layoutSurahItem.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            } else {
-                layoutSurahItem.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            }
+            int layoutDirection = isArabic ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR;
+            layoutSurahItem.setLayoutDirection(layoutDirection);
+
+            // Force layout refresh to apply direction change
+            layoutSurahItem.post(() -> layoutSurahItem.requestLayout());
 
             // Set Surah name
             if (isArabic) {
