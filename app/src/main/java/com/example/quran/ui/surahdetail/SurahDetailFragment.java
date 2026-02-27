@@ -32,7 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quran.R;
 import com.example.quran.data.model.Ayah;
+import com.example.quran.data.model.Recitation;
 import com.example.quran.data.repository.QuranRepository;
+import com.example.quran.ui.audio.AudioPlayerViewModel;
 import com.example.quran.ui.base.BaseFragment;
 import com.example.quran.ui.imageeditor.ImageEditorActivity;
 import com.example.quran.utils.Constants;
@@ -44,6 +46,11 @@ import com.example.quran.utils.ViewModelFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
+
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * Fragment displaying details of a specific Surah with its Ayahs.
@@ -51,6 +58,7 @@ import java.io.InputStream;
 public class SurahDetailFragment extends BaseFragment {
 
     private SurahDetailViewModel viewModel;
+    private AudioPlayerViewModel audioPlayerViewModel;
     private SettingsManager settingsManager;
     private TextView tvSurahName;
     private TextView tvSurahNumber;
@@ -62,6 +70,16 @@ public class SurahDetailFragment extends BaseFragment {
 
     private int surahNumber;
     private int scrollToAyah = -1;
+
+    // Audio controls
+    private ConstraintLayout audioControlBar;
+    private ImageButton btnPlayPause;
+    private ImageButton btnStop;
+    private SeekBar seekBar;
+    private TextView tvCurrentTime;
+    private TextView tvTotalTime;
+    private Recitation currentRecitation;
+    private boolean isUserSeeking = false;
 
     // Image creation fields
     private Uri tempPhotoUri;
@@ -187,9 +205,89 @@ public class SurahDetailFragment extends BaseFragment {
         QuranRepository repository = new QuranRepository(requireContext());
         ViewModelFactory factory = new ViewModelFactory(repository);
         viewModel = new ViewModelProvider(this, factory).get(SurahDetailViewModel.class);
+        audioPlayerViewModel = new ViewModelProvider(requireActivity(), factory).get(AudioPlayerViewModel.class);
+
+        // Initialize audio controls
+        initializeAudioControls(view);
 
         // Load Surah data
         viewModel.loadSurah(surahNumber);
+    }
+
+    private void initializeAudioControls(View view) {
+        audioControlBar = view.findViewById(R.id.audioControlBar);
+        btnPlayPause = view.findViewById(R.id.btnPlayPause);
+        btnStop = view.findViewById(R.id.btnStop);
+        seekBar = view.findViewById(R.id.seekBar);
+        tvCurrentTime = view.findViewById(R.id.tvCurrentTime);
+        tvTotalTime = view.findViewById(R.id.tvTotalTime);
+
+        // Play/Pause button
+        btnPlayPause.setOnClickListener(v -> {
+            if (currentRecitation != null && currentRecitation.isDownloaded()) {
+                if (Boolean.TRUE.equals(audioPlayerViewModel.getIsPlaying().getValue())) {
+                    audioPlayerViewModel.pause();
+                } else {
+                    playAudio();
+                }
+            } else {
+                Toast.makeText(requireContext(), R.string.audio_not_downloaded, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Stop button
+        btnStop.setOnClickListener(v -> {
+            audioPlayerViewModel.stop();
+            audioControlBar.setVisibility(View.GONE);
+        });
+
+        // SeekBar
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    tvCurrentTime.setText(formatTime(progress));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isUserSeeking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isUserSeeking = false;
+                audioPlayerViewModel.seekTo(seekBar.getProgress());
+            }
+        });
+    }
+
+    private void playAudio() {
+        if (currentRecitation != null && currentRecitation.isDownloaded()) {
+            audioPlayerViewModel.play(
+                    currentRecitation.getLocalFilePath(),
+                    surahNumber,
+                    currentSurahName,
+                    getReciterDisplayName(currentRecitation.getReciterName())
+            );
+        }
+    }
+
+    private String getReciterDisplayName(String reciterName) {
+        if (reciterName.equals(Constants.RECITER_ALAFASY)) {
+            return getString(R.string.reciter_alafasy);
+        } else if (reciterName.equals(Constants.RECITER_MINSHAWI)) {
+            return getString(R.string.reciter_minshawi);
+        }
+        return reciterName;
+    }
+
+    private String formatTime(long milliseconds) {
+        int seconds = (int) (milliseconds / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        return String.format(Locale.US, "%02d:%02d", minutes, seconds);
     }
 
     @Override
@@ -240,6 +338,41 @@ public class SurahDetailFragment extends BaseFragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        // Observe recitation data
+        viewModel.getCurrentRecitation().observe(getViewLifecycleOwner(), recitation -> {
+            currentRecitation = recitation;
+            if (recitation != null && recitation.isDownloaded()) {
+                audioControlBar.setVisibility(View.VISIBLE);
+            } else {
+                audioControlBar.setVisibility(View.GONE);
+            }
+        });
+
+        // Observe audio player state
+        audioPlayerViewModel.getIsPlaying().observe(getViewLifecycleOwner(), isPlaying -> {
+            if (isPlaying != null && isPlaying) {
+                btnPlayPause.setImageResource(R.drawable.ic_close); // Use close as pause icon
+                btnPlayPause.setContentDescription(getString(R.string.pause));
+            } else {
+                btnPlayPause.setImageResource(R.drawable.ic_download); // Use download as play icon
+                btnPlayPause.setContentDescription(getString(R.string.play));
+            }
+        });
+
+        audioPlayerViewModel.getCurrentPosition().observe(getViewLifecycleOwner(), position -> {
+            if (position != null && !isUserSeeking) {
+                seekBar.setProgress(position.intValue());
+                tvCurrentTime.setText(formatTime(position));
+            }
+        });
+
+        audioPlayerViewModel.getDuration().observe(getViewLifecycleOwner(), duration -> {
+            if (duration != null && duration > 0) {
+                seekBar.setMax(duration.intValue());
+                tvTotalTime.setText(formatTime(duration));
             }
         });
 
@@ -561,6 +694,19 @@ public class SurahDetailFragment extends BaseFragment {
         intent.putExtra(ImageEditorActivity.EXTRA_SURAH_NAME, currentSurahName);
         intent.putExtra(ImageEditorActivity.EXTRA_AYAH_NUMBER, currentAyahForImage.getAyahNumber());
         startActivity(intent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Bind to audio service
+        audioPlayerViewModel.bindService();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Note: We don't unbind here to allow audio to continue playing in background
     }
 
 }

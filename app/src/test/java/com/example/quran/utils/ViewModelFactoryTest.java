@@ -4,8 +4,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.quran.data.model.Ayah;
+import com.example.quran.data.model.Recitation;
 import com.example.quran.data.model.Surah;
 import com.example.quran.data.repository.QuranRepository;
+import com.example.quran.data.repository.RecitationRepository;
 import com.example.quran.ui.home.HomeViewModel;
 import com.example.quran.ui.surahdetail.SurahDetailViewModel;
 import com.example.quran.ui.surahlist.SurahListViewModel;
@@ -20,12 +22,16 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class ViewModelFactoryTest {
 
     @Mock
     private QuranRepository mockRepository;
+
+    @Mock
+    private RecitationRepository mockRecitationRepository;
 
     private ViewModelFactory factory;
 
@@ -43,6 +49,11 @@ public class ViewModelFactoryTest {
         when(mockRepository.getSurahByNumber(anyInt())).thenReturn(surahLiveData);
         when(mockRepository.getAyahsBySurah(anyInt())).thenReturn(ayahsLiveData);
         when(mockRepository.getRandomAyah()).thenReturn(ayahLiveData);
+
+        // Mock RecitationRepository
+        when(mockRepository.getRecitationRepository()).thenReturn(mockRecitationRepository);
+        when(mockRecitationRepository.getRecitationBySurahAndReciter(anyInt(), anyString()))
+                .thenReturn(new MutableLiveData<Recitation>());
 
         factory = new ViewModelFactory(mockRepository);
     }

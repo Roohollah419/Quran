@@ -4,8 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.quran.data.model.Ayah;
+import com.example.quran.data.model.Recitation;
 import com.example.quran.data.model.Surah;
 import com.example.quran.data.repository.QuranRepository;
+import com.example.quran.data.repository.RecitationRepository;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,11 +29,20 @@ public class SurahDetailViewModelTest {
     @Mock
     private QuranRepository repository;
 
+    @Mock
+    private RecitationRepository recitationRepository;
+
     private SurahDetailViewModel viewModel;
 
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
+
+        // Mock the RecitationRepository
+        when(repository.getRecitationRepository()).thenReturn(recitationRepository);
+        when(recitationRepository.getRecitationBySurahAndReciter(anyInt(), anyString()))
+                .thenReturn(new MutableLiveData<Recitation>());
+
         viewModel = new SurahDetailViewModel(repository);
     }
 

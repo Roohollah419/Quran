@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.quran.ui.base.BaseActivity;
+import com.example.quran.ui.downloadmanager.DownloadManagerFragment;
 import com.example.quran.ui.settings.SettingsDialogFragment;
 import com.example.quran.utils.SettingsManager;
 
@@ -23,6 +24,7 @@ public class MainActivity extends BaseActivity {
     private ImageButton btnSettings;
     private ImageButton btnBookmarks;
     private ImageButton btnComments;
+    private ImageButton btnAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,12 @@ public class MainActivity extends BaseActivity {
             navigateToComments();
         });
 
+        // Setup Audio button
+        btnAudio = findViewById(R.id.btnAudio);
+        btnAudio.setOnClickListener(v -> {
+            showDownloadManagerDialog();
+        });
+
         // Setup Settings button
         btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v -> {
@@ -68,6 +76,8 @@ public class MainActivity extends BaseActivity {
                 btnBookmarks.setImageTintList(ColorStateList.valueOf(
                         ContextCompat.getColor(this, R.color.primary)));
                 btnComments.setImageTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(this, R.color.primary)));
+                btnAudio.setImageTintList(ColorStateList.valueOf(
                         ContextCompat.getColor(this, R.color.primary)));
             });
         }
@@ -106,6 +116,18 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.action_bookmarksFragment_to_commentsFragment);
             }
         }
+    }
+
+    private void showDownloadManagerDialog() {
+        // Check if dialog is already showing
+        DownloadManagerFragment existingDialog = (DownloadManagerFragment)
+                getSupportFragmentManager().findFragmentByTag("DownloadManagerDialog");
+        if (existingDialog != null && existingDialog.isVisible()) {
+            return; // Dialog already showing, don't create another
+        }
+
+        DownloadManagerFragment dialog = DownloadManagerFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), "DownloadManagerDialog");
     }
 
     private void showSettingsDialog() {

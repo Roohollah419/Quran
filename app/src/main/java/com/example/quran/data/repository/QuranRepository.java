@@ -28,6 +28,7 @@ public class QuranRepository {
     private final SurahDao surahDao;
     private final AyahDao ayahDao;
     private final LiveData<List<SurahEntity>> allSurahs;
+    private RecitationRepository recitationRepository;
 
     public QuranRepository(Context context) {
         this.context = context;
@@ -163,5 +164,16 @@ public class QuranRepository {
      */
     public Context getContext() {
         return context;
+    }
+
+    /**
+     * Get the RecitationRepository instance.
+     * Lazy initialization to avoid circular dependencies.
+     */
+    public RecitationRepository getRecitationRepository() {
+        if (recitationRepository == null) {
+            recitationRepository = new RecitationRepository(context);
+        }
+        return recitationRepository;
     }
 }

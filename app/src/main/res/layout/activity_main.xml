@@ -40,6 +40,19 @@
             android:contentDescription="@string/comments"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnAudio"
+            android:layout_marginEnd="0dp"/>
+
+        <ImageButton
+            android:id="@+id/btnAudio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="0dp"
+            android:src="@drawable/ic_audio_download"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/audio_recitations"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnSettings"
             android:layout_marginEnd="0dp"/>
 

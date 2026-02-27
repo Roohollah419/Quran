@@ -9,7 +9,7 @@ public class ConstantsTest {
     @Test
     public void testDatabaseConstants() {
         assertEquals("quran_database", Constants.DATABASE_NAME);
-        assertEquals(1, Constants.DATABASE_VERSION);
+        assertEquals(2, Constants.DATABASE_VERSION);
     }
 
     @Test

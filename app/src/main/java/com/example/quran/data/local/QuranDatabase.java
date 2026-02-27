@@ -7,8 +7,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.quran.data.local.dao.AyahDao;
+import com.example.quran.data.local.dao.RecitationDao;
 import com.example.quran.data.local.dao.SurahDao;
 import com.example.quran.data.local.entity.AyahEntity;
+import com.example.quran.data.local.entity.RecitationEntity;
 import com.example.quran.data.local.entity.SurahEntity;
 import com.example.quran.utils.Constants;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.Executors;
 /**
  * Room Database for Quran data.
  */
-@Database(entities = {SurahEntity.class, AyahEntity.class}, version = Constants.DATABASE_VERSION, exportSchema = false)
+@Database(entities = {SurahEntity.class, AyahEntity.class, RecitationEntity.class}, version = Constants.DATABASE_VERSION, exportSchema = false)
 public abstract class QuranDatabase extends RoomDatabase {
 
     private static volatile QuranDatabase INSTANCE;
@@ -27,6 +29,7 @@ public abstract class QuranDatabase extends RoomDatabase {
 
     public abstract SurahDao surahDao();
     public abstract AyahDao ayahDao();
+    public abstract RecitationDao recitationDao();
 
     public static QuranDatabase getInstance(Context context) {
         if (INSTANCE == null) {

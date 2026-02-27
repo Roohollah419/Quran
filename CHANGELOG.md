@@ -5,6 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-02-25
+
+### Added
+- **Audio Recitation Download Manager** - New dialog for downloading and managing Quran audio recitations
+  - Support for two renowned reciters: Mishary Alafasy and Mohamed Siddiq El-Minshawi
+  - Download all 114 Surahs for offline listening
+  - Real-time download progress tracking with visual progress bars
+  - Individual and bulk delete functionality for downloaded recitations
+  - Storage space validation before downloads (requires 100 MB minimum free space)
+  - File validation after downloads to ensure integrity
+  - Downloaded recitation count and storage usage display
+- **New Audio Button in Toolbar** - Quick access to Download Manager from any screen
+- **Recitation Database** - Room database table for managing audio metadata
+  - Tracks download status (NOT_DOWNLOADED, DOWNLOADING, DOWNLOADED, FAILED)
+  - Stores download progress, file paths, and file sizes
+  - Integrates with Android DownloadManager for reliable downloads
+- **Download Infrastructure**
+  - `DownloadManagerHelper` utility for Android DownloadManager integration
+  - `StorageHelper` utility for space checking and file size formatting
+  - `DownloadCompleteBroadcastReceiver` for handling download completion events
+- **New UI Components**
+  - `DownloadManagerFragment` - Full-screen dialog with TabLayout for reciter selection
+  - `RecitationDownloadAdapter` - RecyclerView adapter with download status indicators
+  - `DownloadManagerViewModel` - Manages download state and operations
+  - Custom icons: `ic_audio_download.xml`, `ic_download.xml`
+- **Audio String Resources** - Comprehensive localization for audio features (50+ strings)
+
+### Changed
+- **Database Schema Updated** - Version 1 → 2
+  - Added `recitations` table with 9 fields
+  - Uses fallbackToDestructiveMigration strategy
+- **Repository Pattern Extended**
+  - New `RecitationRepository` for audio data operations
+  - Integrated with `QuranRepository` via getter method
+  - Follows existing MVVM architecture pattern
+- **ViewModelFactory Updated** - Registered `DownloadManagerViewModel`
+- **Navigation Enhanced** - Download Manager accessible from toolbar
+- **Permissions Added**
+  - INTERNET permission for downloading audio files
+  - FOREGROUND_SERVICE permission for future audio playback service
+
+### Technical Details
+- Audio source: EveryAyah.com API (128 kbps MP3 files)
+- Storage location: Internal storage (`/data/data/com.example.quran/files/recitations/`)
+- Estimated size: ~150-200 MB per reciter, ~300-400 MB total for both
+- Download progress polling: 500ms interval for real-time updates
+- File storage pattern: Zero-padded 3-digit surah numbers (001.mp3 - 114.mp3)
+- Minimum file size validation: 50 KB to detect corrupted downloads
+- Database entities: `RecitationEntity` with 9 fields
+- Domain models: `Recitation` with `DownloadStatus` enum
+- DAOs: `RecitationDao` with 16 query methods
+- New packages created: `ui.downloadmanager`, `receiver`
+
+### Notes
+- Audio playback features are planned for a future release
+- This version focuses on download management and offline storage
+- Downloaded files are automatically deleted when app is uninstalled
+- No external storage permissions required (uses internal storage)
+
 ## [1.5.2] - 2026-02-24
 
 ### Changed
